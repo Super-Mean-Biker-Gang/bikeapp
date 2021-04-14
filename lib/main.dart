@@ -11,7 +11,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
-    DeviceOrientation.portraitUp
+    DeviceOrientation.portraitUp,
   ]);
   runApp(App());
 }

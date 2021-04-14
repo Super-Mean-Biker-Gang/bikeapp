@@ -6,15 +6,13 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-
   @override
-  Widget build(BuildContext context) {    
-
+  Widget build(BuildContext context) {
     final routes = {
       // Put screen routes in here later
     };
 
-    return MaterialApp(  
+    return MaterialApp(
       title: 'Super Mean Biker Gang',
       routes: routes,
     );
