@@ -11,8 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 // import 'package:bikeapp/app.dart';
 
 void main() {
-  testWidgets('CI filler, will add unit tests later', (WidgetTester tester) async {
-
+  testWidgets('CI filler, will add unit tests later',
+      (WidgetTester tester) async {
     var bypass = true;
     expect(bypass, true);
   });
