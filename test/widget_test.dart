@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bikeapp/main.dart'; // Possibly remove
+// import 'package:bikeapp/main.dart'; // Possibly remove
 import 'package:bikeapp/app.dart';
 
 void main() {
