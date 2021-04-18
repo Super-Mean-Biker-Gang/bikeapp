@@ -28,6 +28,7 @@ class _AppState extends State<App> {
         StreamProvider(
           create: (context) =>
               context.read<AuthenticationService>().authStateChanges,
+          initialData: 0,
         )
       ],
       child: MaterialApp(
