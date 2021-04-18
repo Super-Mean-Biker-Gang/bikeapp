@@ -1,3 +1,4 @@
+import 'package:bikeapp/screens/create_account.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatefulWidget {
@@ -9,7 +10,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     final routes = {
-      // Put screen routes in here later
+      CreateAccountScreen.routeName: (context) => CreateAccountScreen(),
     };
 
     return MaterialApp(
