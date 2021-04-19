@@ -5,6 +5,7 @@ import 'package:bikeapp/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_config/flutter_config.dart';
 
 class App extends StatefulWidget {
   @override
@@ -20,6 +21,8 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    final key = FlutterConfig.get('API_KEY');
+    print('API key is: $key');
     return MultiProvider(
       providers: [
         Provider<AuthenticationService>(
@@ -32,6 +35,7 @@ class _AppState extends State<App> {
       ],
       child: MaterialApp(
         title: 'Super Mean Biker Gang',
+        debugShowCheckedModeBanner: false,
         routes: routes,
         home: AuthenticationWrapper(),
       ),
