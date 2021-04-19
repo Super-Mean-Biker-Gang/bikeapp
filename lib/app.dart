@@ -32,6 +32,7 @@ class _AppState extends State<App> {
       ],
       child: MaterialApp(
         title: 'Super Mean Biker Gang',
+        debugShowCheckedModeBanner: false,
         routes: routes,
         home: AuthenticationWrapper(),
       ),
