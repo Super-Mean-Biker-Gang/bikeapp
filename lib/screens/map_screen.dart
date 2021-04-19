@@ -11,12 +11,12 @@ class MapScreen extends StatelessWidget {
     return Scaffold(
         body: Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("Map Screen"),
           ElevatedButton(
             onPressed: () {
               context.read<AuthenticationService>().signOut();
-              Navigator.of(context).pushNamed(SignInScreen.routeName);
             },
             child: Text("Sign out"),
           )

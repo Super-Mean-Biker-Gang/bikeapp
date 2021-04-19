@@ -12,14 +12,14 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  final routes = {
+    SignInScreen.routeName: (context) => SignInScreen(),
+    CreateAccountScreen.routeName: (context) => CreateAccountScreen(),
+    MapScreen.routeName: (context) => MapScreen(),
+  };
+
   @override
   Widget build(BuildContext context) {
-    final routes = {
-      SignInScreen.routeName: (context) => SignInScreen(),
-      CreateAccountScreen.routeName: (context) => CreateAccountScreen(),
-      MapScreen.routeName: (context) => MapScreen(),
-    };
-
     return MultiProvider(
       providers: [
         Provider<AuthenticationService>(
@@ -41,14 +41,17 @@ class _AppState extends State<App> {
 }
 
 class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({
+    Key key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
       return MapScreen();
-    } else {
-      return SignInScreen();
     }
+    return SignInScreen();
   }
 }

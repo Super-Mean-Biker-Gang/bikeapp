@@ -13,6 +13,7 @@ class CreateAccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextField(
           controller: emailController,
