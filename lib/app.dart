@@ -26,10 +26,9 @@ class _AppState extends State<App> {
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) =>
-              context.read<AuthenticationService>().authStateChanges,
-          initialData: 0,
-        )
+            create: (context) =>
+                context.read<AuthenticationService>().authStateChanges,
+            initialData: AuthenticationService(FirebaseAuth.instance).getUser())
       ],
       child: MaterialApp(
         title: 'Super Mean Biker Gang',
