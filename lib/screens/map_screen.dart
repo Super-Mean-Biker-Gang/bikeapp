@@ -1,7 +1,6 @@
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:bikeapp/screens/sign_in_screen.dart';
 
 class MapScreen extends StatelessWidget {
   static const routeName = 'map_screen';
