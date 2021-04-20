@@ -25,15 +25,13 @@ class MapEndDrawer extends StatelessWidget {
             height: queryData.size.height * .20,
             child: DrawerHeader(
               child: Text('Quick Access',
-                style: TextStyle(fontSize: queryData.textScaleFactor * 30)
-              ),
+                  style: TextStyle(fontSize: queryData.textScaleFactor * 30)),
             ),
           ),
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Account',
-              style: TextStyle(fontSize: queryData.textScaleFactor * 20)
-            ),
+                style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
             onTap: () {
               print('Moving to Account Page');
             },
@@ -41,8 +39,7 @@ class MapEndDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.add),
             title: Text('Add Bike',
-              style: TextStyle(fontSize: queryData.textScaleFactor * 20)
-            ),
+                style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
             onTap: () {
               print('Adding a bike');
             },
@@ -50,8 +47,7 @@ class MapEndDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Sign Out',
-              style: TextStyle(fontSize: queryData.textScaleFactor * 20)
-            ),
+                style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
             onTap: () {
               context.read<AuthenticationService>().signOut();
             },

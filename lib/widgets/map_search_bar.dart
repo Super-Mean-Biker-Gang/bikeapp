@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class MapSearchBar extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     return Container(
       padding: EdgeInsets.only(right: 10, bottom: 5),
-      margin: EdgeInsets.only(left: queryData.size.width * .05, right: queryData.size.width * .05),
+      margin: EdgeInsets.only(
+          left: queryData.size.width * .05, right: queryData.size.width * .05),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.all(Radius.circular(50))
-      ),
+          color: Colors.white,
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.all(Radius.circular(50))),
       child: Stack(
         children: [
           TextField(
@@ -37,7 +36,8 @@ class MapSearchBar extends StatelessWidget {
                   print('Asks for location permissions');
                 },
                 tooltip: 'Find my device location',
-                icon: Icon(Icons.location_pin, color: Colors.green, size: queryData.textScaleFactor * 40),
+                icon: Icon(Icons.location_pin,
+                    color: Colors.green, size: queryData.textScaleFactor * 40),
               ),
               Row(
                 children: [
@@ -47,7 +47,8 @@ class MapSearchBar extends StatelessWidget {
                     },
                     tooltip: 'Filter bikes',
                     icon: Icon(Icons.filter_alt,
-                      color: Colors.blue, size: queryData.textScaleFactor * 40),
+                        color: Colors.blue,
+                        size: queryData.textScaleFactor * 40),
                   ),
                   IconButton(
                     onPressed: () {
@@ -55,10 +56,11 @@ class MapSearchBar extends StatelessWidget {
                     },
                     tooltip: 'Account Access',
                     icon: Icon(Icons.account_circle_outlined,
-                      color: Colors.blue, size: queryData.textScaleFactor * 40),
+                        color: Colors.blue,
+                        size: queryData.textScaleFactor * 40),
                   ),
                 ],
-              ), 
+              ),
             ],
           ),
         ],
