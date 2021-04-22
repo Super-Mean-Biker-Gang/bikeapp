@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/screens/create_account_screen.dart';
@@ -16,7 +15,9 @@ class SignInScreen extends StatelessWidget {
       body: SafeArea(
         child: SizedBox(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: responsiveHeight(25.0), horizontal: responsiveWidth(20.0)),
+            padding: EdgeInsets.symmetric(
+                vertical: responsiveHeight(25.0),
+                horizontal: responsiveWidth(20.0)),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -45,7 +46,7 @@ class SignInScreen extends StatelessWidget {
               ),
             ),
           ),
-        ), 
+        ),
       ),
     );
   }
@@ -62,12 +63,13 @@ class SignInScreen extends StatelessWidget {
         ),
         SizedBox(height: responsiveHeight(5.0)),
         GestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(CreateAccountScreen.routeName),
+          onTap: () =>
+              Navigator.of(context).pushNamed(CreateAccountScreen.routeName),
           child: Text(
             "Create Account",
             style: TextStyle(
-                fontSize: responsiveWidth(13.0),
-                color: Colors.blueAccent[700],
+              fontSize: responsiveWidth(13.0),
+              color: Colors.blueAccent[700],
             ),
           ),
         ),
@@ -75,5 +77,3 @@ class SignInScreen extends StatelessWidget {
     );
   }
 }
-
-

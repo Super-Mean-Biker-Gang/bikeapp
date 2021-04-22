@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 
 class CoolButton extends StatelessWidget {
-
   final String title;
   final Color textColor;
   final Color filledColor;
   final Color splashColor;
   final Function() onPressed;
-  
-  CoolButton({this.title, this.textColor, this.filledColor, this.splashColor, this.onPressed});
+
+  CoolButton(
+      {this.title,
+      this.textColor,
+      this.filledColor,
+      this.splashColor,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +24,18 @@ class CoolButton extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-            color: textColor, 
+            color: textColor,
             fontWeight: FontWeight.w600,
             fontSize: responsiveWidth(16.0),
           ),
         ),
-        color: filledColor, 
+        color: filledColor,
         splashColor: splashColor,
         onPressed: onPressed,
         shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25.0), 
+          borderRadius: BorderRadius.circular(25.0),
           borderSide: BorderSide(
-            color: Theme.of(context).primaryColor, 
+            color: Theme.of(context).primaryColor,
             width: responsiveWidth(1.0),
           ),
         ),
