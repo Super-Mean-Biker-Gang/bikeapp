@@ -5,22 +5,16 @@ class CoolButton extends StatelessWidget {
   final String title;
   final Color textColor;
   final Color filledColor;
-  final Color splashColor;
   final Function() onPressed;
 
-  CoolButton(
-      {this.title,
-      this.textColor,
-      this.filledColor,
-      this.splashColor,
-      this.onPressed});
+  CoolButton({this.title, this.textColor, this.filledColor, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: responsiveWidth(35.0),
-      child: RaisedButton(
+      child: ElevatedButton(
         child: Text(
           title,
           style: TextStyle(
@@ -29,14 +23,17 @@ class CoolButton extends StatelessWidget {
             fontSize: responsiveWidth(16.0),
           ),
         ),
-        color: filledColor,
-        splashColor: splashColor,
         onPressed: onPressed,
-        shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25.0),
-          borderSide: BorderSide(
-            color: Theme.of(context).primaryColor,
-            width: responsiveWidth(1.0),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(filledColor),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+              side: BorderSide(
+                color: Theme.of(context).primaryColor,
+                width: responsiveWidth(1.0),
+              ),
+            ),
           ),
         ),
       ),

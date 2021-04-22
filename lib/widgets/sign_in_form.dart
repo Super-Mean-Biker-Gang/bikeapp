@@ -91,7 +91,6 @@ class _SignInFormState extends State<SignInForm> {
       title: 'Sign in',
       textColor: Colors.white,
       filledColor: Colors.purple[300],
-      splashColor: Theme.of(context).primaryColor,
       onPressed: () {
         context.read<AuthenticationService>().signIn(
             email: _emailController.text.trim(),
