@@ -1,4 +1,5 @@
 import 'package:bikeapp/screens/create_account_screen.dart';
+import 'package:bikeapp/screens/forgot_password.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/screens/sign_in_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
@@ -15,6 +16,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final routes = {
     SignInScreen.routeName: (context) => SignInScreen(),
+    ForgotPassword.routeName: (context) => ForgotPassword(),
     CreateAccountScreen.routeName: (context) => CreateAccountScreen(),
     MapScreen.routeName: (context) => MapScreen(),
   };
@@ -35,6 +37,9 @@ class _AppState extends State<App> {
       ],
       child: MaterialApp(
         title: 'Super Mean Biker Gang',
+        theme: ThemeData(
+          primaryColor: Colors.cyan[300],
+        ),
         debugShowCheckedModeBanner: false,
         routes: routes,
         home: AuthenticationWrapper(),
