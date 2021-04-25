@@ -13,14 +13,14 @@ class CoolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: responsiveWidth(35.0),
+      height: responsiveWidth(26.0),
       child: ElevatedButton(
         child: Text(
           title,
           style: TextStyle(
             color: textColor,
             fontWeight: FontWeight.w600,
-            fontSize: responsiveWidth(16.0),
+            fontSize: responsiveWidth(12.0),
           ),
         ),
         onPressed: onPressed,
@@ -30,7 +30,7 @@ class CoolButton extends StatelessWidget {
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
               side: BorderSide(
-                color: Theme.of(context).primaryColor,
+                color: Colors.cyanAccent,
                 width: responsiveWidth(1.0),
               ),
             ),

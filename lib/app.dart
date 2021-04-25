@@ -38,7 +38,7 @@ class _AppState extends State<App> {
       child: MaterialApp(
         title: 'Super Mean Biker Gang',
         theme: ThemeData(
-          primaryColor: Colors.cyan[300],
+          primaryColor: Colors.purple[600],
         ),
         debugShowCheckedModeBanner: false,
         routes: routes,
