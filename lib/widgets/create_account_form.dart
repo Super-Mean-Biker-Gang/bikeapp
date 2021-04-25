@@ -62,43 +62,7 @@ class CreateAccountForm extends StatelessWidget {
                     ),
                     validator: passwordValidator,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_registerFormKey.currentState.validate()) {
-                          if (passwordController.text ==
-                              confirmPasswordController.text) {
-                            context.read<AuthenticationService>().createAccount(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim());
-                            context.read<AuthenticationService>().signIn(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim());
-                            Navigator.of(context)
-                                .pushNamed(MapScreen.routeName);
-                          } else {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                      title: Text("Error"),
-                                      content:
-                                          Text("The passwords do not match"),
-                                      actions: <Widget>[
-                                        TextButton(
-                                            child: Text("Close"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            })
-                                      ]);
-                                });
-                          }
-                        }
-                      },
-                      child: Text("Create Account"),
-                    ),
-                  ),
+                  submitButton(context),
                   Text("Already have an account?"),
                   TextButton(
                     child: Text("Login here!"),
@@ -107,5 +71,41 @@ class CreateAccountForm extends StatelessWidget {
                     },
                   )
                 ]))));
+  }
+
+  Widget submitButton(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {
+            if (_registerFormKey.currentState.validate()) {
+              if (passwordController.text == confirmPasswordController.text) {
+                context.read<AuthenticationService>().createAccount(
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim());
+                context.read<AuthenticationService>().signIn(
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim());
+                Navigator.of(context).pushNamed(MapScreen.routeName);
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                          title: Text("Error"),
+                          content: Text("The passwords do not match"),
+                          actions: <Widget>[
+                            TextButton(
+                                child: Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                })
+                          ]);
+                    });
+              }
+            }
+          },
+          child: Text("Create Account"),
+        ));
   }
 }
