@@ -1,7 +1,11 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/screens/forgot_password.dart';
-import 'package:bikeapp/styles/email_password_field.dart';
+import 'package:bikeapp/services/authentication_service.dart';
+import 'package:bikeapp/styles/cool_button.dart';
+import 'package:bikeapp/styles/custom_input_decoration.dart';
 
 class SignInForm extends StatefulWidget {
   @override
@@ -10,6 +14,10 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String email;
+  String password;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +32,48 @@ class _SignInFormState extends State<SignInForm> {
             SizedBox(height: responsiveHeight(20.0)),
             forgotPasswordText(context),
             SizedBox(height: responsiveHeight(20.0)),
-            signInButton(context),
+            signInButton(context, formKey),
           ],
         ),
       ),
+    );
+  }
+
+  Widget emailTextField() {
+    return TextFormField(
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      style: TextStyle(color: Colors.white),
+      decoration: customInputDecoration(
+          hint: 'Enter your email', icon: Icon(Icons.mail)),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter your email';
+        } else if (!EmailValidator.validate(value) && value.isNotEmpty) {
+          return 'Please enter a valid email address';
+        }
+        return null;
+      },
+      onSaved: (value) => email = value.trim(),
+    );
+  }
+
+  Widget passwordTextField() {
+    return TextFormField(
+      controller: passwordController,
+      obscureText: true,
+      style: TextStyle(color: Colors.white),
+      decoration: customInputDecoration(
+          hint: 'Enter your password', icon: Icon(Icons.lock)),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter your password';
+        } else if (value.length < 8 && value.isNotEmpty) {
+          return 'Password must be at least 8 characters';
+        }
+        return null;
+      },
+      onSaved: (value) => password = value.trim(),
     );
   }
 
@@ -43,6 +89,23 @@ class _SignInFormState extends State<SignInForm> {
               color: Colors.cyanAccent),
         ),
       ]),
+    );
+  }
+
+  Widget signInButton(BuildContext context, GlobalKey<FormState> formKey) {
+    return CoolButton(
+      title: 'Sign in',
+      textColor: Colors.white,
+      filledColor: Colors.green,
+      onPressed: () {
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
+          context.read<AuthenticationService>().signIn(
+                email: emailController.text.trim(),
+                password: passwordController.text.trim(),
+              );
+        }
+      },
     );
   }
 }

@@ -1,11 +1,23 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:bikeapp/models/responsive_size.dart';
+import 'package:bikeapp/services/authentication_service.dart';
 import 'package:bikeapp/styles/color_gradients.dart';
 import 'package:bikeapp/styles/cool_button.dart';
-import 'package:bikeapp/styles/email_password_field.dart';
+import 'package:bikeapp/styles/custom_input_decoration.dart';
 
-class ForgotPassword extends StatelessWidget {
+class ForgotPassword extends StatefulWidget {
   static const routeName = 'forgot_password';
+
+  @override
+  _ForgotPasswordState createState() => _ForgotPasswordState();
+}
+
+class _ForgotPasswordState extends State<ForgotPassword> {
+  final TextEditingController emailController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  String email;
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +54,19 @@ class ForgotPassword extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: responsiveHeight(45.0)),
-                    emailTextField(),
-                    SizedBox(height: responsiveHeight(65.0)),
-                    submitRequestButton(),
+                    Container(
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            //emailTextField(emailController),
+                            emailTextField(),
+                            SizedBox(height: responsiveHeight(65.0)),
+                            submitRequestButton(context, formKey),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -55,12 +77,72 @@ class ForgotPassword extends StatelessWidget {
     );
   }
 
-  Widget submitRequestButton() {
+  Widget emailTextField() {
+    return TextFormField(
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      style: TextStyle(color: Colors.white),
+      decoration: customInputDecoration(
+          hint: 'Enter your email', icon: Icon(Icons.mail)),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter your email';
+        } else if (!EmailValidator.validate(value) && value.isNotEmpty) {
+          return 'Please enter a valid email address';
+        }
+        return null;
+      },
+      onSaved: (value) => email = value.trim(),
+    );
+  }
+
+  Widget submitRequestButton(BuildContext context, formKey) {
     return CoolButton(
       title: 'Submit Request',
       textColor: Colors.white,
       filledColor: Colors.green,
-      onPressed: () {},
+      onPressed: () {
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
+          context.read<AuthenticationService>().passwordReset(
+                email: emailController.text.trim(),
+              );
+          Navigator.of(context).pop();
+        }
+        _showDialog(context);
+      },
+    );
+  }
+
+  Future<void> _showDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Password Reset",
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'A link for password reset has been sent to your email',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Theme.of(context).primaryColor,
+          actions: [
+            TextButton(
+                child: Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                )),
+          ],
+        );
+      },
     );
   }
 }
