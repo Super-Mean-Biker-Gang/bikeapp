@@ -28,6 +28,7 @@ dependencies:
   firebase_core: ^1.0.3
   firebase_auth: ^1.1.0
   provider: ^5.0.0
+  email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_config: ^2.0.0
