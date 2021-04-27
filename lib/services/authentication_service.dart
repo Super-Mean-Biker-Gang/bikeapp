@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 // Followed along with video https://www.youtube.com/watch?v=oJ5Vrya3wCQ
 
 class AuthenticationService {

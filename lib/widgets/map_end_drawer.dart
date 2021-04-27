@@ -50,6 +50,7 @@ class MapEndDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
             onTap: () {
               context.read<AuthenticationService>().signOut();
+              Navigator.popUntil(context, ModalRoute.withName("/"));
             },
           ),
         ],
