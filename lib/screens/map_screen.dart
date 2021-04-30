@@ -62,8 +62,8 @@ class MapScreenState extends State<MapScreen> {
     if (permission == LocationPermission.deniedForever) {
       print(
           'Location permissions are permanently denied, we cannot request permissions.');
-      return; 
-    } 
+      return;
+    }
 
     Position position = await Geolocator.getCurrentPosition();
     setUserPosition(position);
