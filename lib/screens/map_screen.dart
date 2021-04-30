@@ -55,20 +55,19 @@ class MapScreenState extends State<MapScreen> {
 
       if (permission == LocationPermission.denied) {
         print('Location permissions are denied');
+        return;
       }
-    } else if (permission == LocationPermission.deniedForever) {
-      print(
-          'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // If permission granted, set user location and move map to it
-    if ((permission == LocationPermission.always ||
-            permission == LocationPermission.whileInUse) &&
-        serviceEnabled) {
-      Position position = await Geolocator.getCurrentPosition();
-      setUserPosition(position);
-      goToPosition(_userPosition);
-    }
+    if (permission == LocationPermission.deniedForever) {
+      print(
+          'Location permissions are permanently denied, we cannot request permissions.');
+      return; 
+    } 
+
+    Position position = await Geolocator.getCurrentPosition();
+    setUserPosition(position);
+    goToPosition(_userPosition);
   }
 
   @override
