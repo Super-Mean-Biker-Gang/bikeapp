@@ -60,7 +60,7 @@ class MapScreenState extends State<MapScreen> {
       print(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    
+
     // If permission granted, set user location and move map to it
     if ((permission == LocationPermission.always ||
             permission == LocationPermission.whileInUse) &&
