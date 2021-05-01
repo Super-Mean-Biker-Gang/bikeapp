@@ -1,21 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:flutter/services.dart';
+
 // Followed along with video https://www.youtube.com/watch?v=oJ5Vrya3wCQ
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
-
   AuthenticationService(this._firebaseAuth);
 
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
-
+ 
   Future<String> signIn({String email, String password}) async {
-    try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return "Signed in";
-    } on FirebaseAuthException catch (e) {
-      return e.message;
-    }
+    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    User user = result.user;
+    return user.uid;
   }
 
   Future<String> createAccount({String email, String password}) async {

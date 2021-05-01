@@ -18,6 +18,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController emailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   String email;
+  String eMessage;
+
+  @override
+  void initState() {
+    eMessage = "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +66,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         key: formKey,
                         child: Column(
                           children: [
-                            //emailTextField(emailController),
                             emailTextField(),
+                            SizedBox(height: responsiveHeight(10.0)),
+                            displayErrorMessage(),
                             SizedBox(height: responsiveHeight(65.0)),
-                            submitRequestButton(context, formKey),
+                            submitRequestButton(context),                           
                           ],
                         ),
                       ),
@@ -96,22 +104,45 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
-  Widget submitRequestButton(BuildContext context, formKey) {
+  Widget submitRequestButton(BuildContext context) {
     return CoolButton(
       title: 'Submit Request',
       textColor: Colors.white,
       filledColor: Colors.green,
-      onPressed: () {
+      onPressed: () async {
+        setState(() {
+          eMessage = "";
+        });
         if (formKey.currentState.validate()) {
           formKey.currentState.save();
-          context.read<AuthenticationService>().passwordReset(
-                email: emailController.text.trim(),
-              );
-          Navigator.of(context).pop();
+          try {
+            await context.read<AuthenticationService>().passwordReset(
+            email: emailController.text.trim(),
+            );
+            _showDialog(context);
+          }catch (error) {
+            setState(() {
+              eMessage = error.message;
+            });    
+          }
         }
-        _showDialog(context);
       },
     );
+  }
+
+  Widget displayErrorMessage() {
+    if (eMessage != null) {
+      return Text(
+        eMessage,
+        style: TextStyle(
+          color: Colors.redAccent,
+          fontSize: responsiveWidth(9.0),
+          fontWeight: FontWeight.w500,
+        )
+      );
+    } else {
+      return Text('');
+    }
   }
 
   Future<void> _showDialog(BuildContext context) async {
