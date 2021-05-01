@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bikeapp/models/responsive_size.dart';
+import 'package:bikeapp/screens/sign_in_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:bikeapp/styles/color_gradients.dart';
 import 'package:bikeapp/styles/cool_button.dart';
@@ -119,7 +120,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             await context.read<AuthenticationService>().passwordReset(
             email: emailController.text.trim(),
             );
-            _showDialog(context);
+            customPopUp(context);
           }catch (error) {
             setState(() {
               eMessage = error.message;
@@ -145,8 +146,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
 
-  Future<void> _showDialog(BuildContext context) async {
-    return showDialog(
+  void customPopUp(BuildContext context) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -161,16 +162,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           backgroundColor: Theme.of(context).primaryColor,
           actions: [
             TextButton(
-                child: Text(
-                  'OK',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
-                )),
+              child: Text(
+                'Back to Submit Request',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(ForgotPassword.routeName);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.green),
+              )
+            ),
+            TextButton(
+              child: Text(
+                'Begin Sign in',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(SignInScreen.routeName);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.green),
+              )
+            ),
           ],
         );
       },
