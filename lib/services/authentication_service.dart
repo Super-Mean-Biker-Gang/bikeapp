@@ -8,9 +8,10 @@ class AuthenticationService {
   AuthenticationService(this._firebaseAuth);
 
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
- 
+
   Future<String> signIn({String email, String password}) async {
-    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
     User user = result.user;
     return user.uid;
   }

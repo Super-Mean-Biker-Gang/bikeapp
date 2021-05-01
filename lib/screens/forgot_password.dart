@@ -71,7 +71,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             SizedBox(height: responsiveHeight(10.0)),
                             displayErrorMessage(),
                             SizedBox(height: responsiveHeight(65.0)),
-                            submitRequestButton(context),                           
+                            submitRequestButton(context),
                           ],
                         ),
                       ),
@@ -118,13 +118,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           formKey.currentState.save();
           try {
             await context.read<AuthenticationService>().passwordReset(
-            email: emailController.text.trim(),
-            );
+                  email: emailController.text.trim(),
+                );
             customPopUp(context);
-          }catch (error) {
+          } catch (error) {
             setState(() {
               eMessage = error.message;
-            });    
+            });
           }
         }
       },
@@ -133,14 +133,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Widget displayErrorMessage() {
     if (eMessage != null) {
-      return Text(
-        eMessage,
-        style: TextStyle(
-          color: Colors.redAccent,
-          fontSize: responsiveWidth(9.0),
-          fontWeight: FontWeight.w500,
-        )
-      );
+      return Text(eMessage,
+          style: TextStyle(
+            color: Colors.redAccent,
+            fontSize: responsiveWidth(9.0),
+            fontWeight: FontWeight.w500,
+          ));
     } else {
       return Text('');
     }
@@ -162,29 +160,27 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           backgroundColor: Theme.of(context).primaryColor,
           actions: [
             TextButton(
-              child: Text(
-                'Back to Submit Request',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.of(context).pushNamed(ForgotPassword.routeName);
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.green),
-              )
-            ),
+                child: Text(
+                  'Back to Submit Request',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(ForgotPassword.routeName);
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                )),
             TextButton(
-              child: Text(
-                'Begin Sign in',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.of(context).pushNamed(SignInScreen.routeName);
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.green),
-              )
-            ),
+                child: Text(
+                  'Begin Sign in',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(SignInScreen.routeName);
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                )),
           ],
         );
       },

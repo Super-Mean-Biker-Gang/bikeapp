@@ -9,7 +9,6 @@ import 'package:bikeapp/styles/cool_button.dart';
 import 'package:bikeapp/styles/custom_input_decoration.dart';
 
 class SignInForm extends StatefulWidget {
-
   @override
   _SignInFormState createState() => _SignInFormState();
 }
@@ -56,13 +55,13 @@ class _SignInFormState extends State<SignInForm> {
       keyboardType: TextInputType.emailAddress,
       style: TextStyle(color: Colors.white),
       decoration: customInputDecoration(
-        hint: 'Enter your email', icon: Icon(Icons.mail)),
+          hint: 'Enter your email', icon: Icon(Icons.mail)),
       validator: (value) {
         if (value.isEmpty) {
           return 'Please enter your email';
         } else if (!EmailValidator.validate(value) && value.isNotEmpty) {
           return 'Please enter a valid email address';
-        } 
+        }
         return null;
       },
       onSaved: (value) => email = value.trim(),
@@ -95,60 +94,50 @@ class _SignInFormState extends State<SignInForm> {
         Text(
           "Forgot Password?",
           style: TextStyle(
-            fontSize: responsiveWidth(11.0),
-            fontWeight: FontWeight.w500,
-            color: Colors.cyanAccent),
+              fontSize: responsiveWidth(11.0),
+              fontWeight: FontWeight.w500,
+              color: Colors.cyanAccent),
         ),
       ]),
     );
   }
 
-  Widget signInButton(BuildContext context) { 
+  Widget signInButton(BuildContext context) {
     return CoolButton(
-      title: 'Sign in',
-      textColor: Colors.white,
-      filledColor: Colors.green,
-      onPressed: () async{
-        setState(() {
-          eMessage = "";
-        });
-        if (formKey.currentState.validate()) {
-          formKey.currentState.save();
-          try {
-            await context.read<AuthenticationService>().signIn(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim(),
-            );  
-          } catch (error) {
-            setState(() {
-              eMessage = error.message;
-            });    
+        title: 'Sign in',
+        textColor: Colors.white,
+        filledColor: Colors.green,
+        onPressed: () async {
+          setState(() {
+            eMessage = "";
+          });
+          if (formKey.currentState.validate()) {
+            formKey.currentState.save();
+            try {
+              await context.read<AuthenticationService>().signIn(
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim(),
+                  );
+              Navigator.of(context).pushNamed(MapScreen.routeName);
+            } catch (error) {
+              setState(() {
+                eMessage = error.message;
+              });
+            }
           }
-          Navigator.of(context).pushNamed(MapScreen.routeName);
-        }
-      }
-    );
+        });
   }
 
   Widget displayErrorMessage() {
     if (eMessage != null) {
-      return Text(
-        eMessage,
-        style: TextStyle(
-          color: Colors.redAccent,
-          fontSize: responsiveWidth(9.0),
-          fontWeight: FontWeight.w500,
-        )
-      );
+      return Text(eMessage,
+          style: TextStyle(
+            color: Colors.redAccent,
+            fontSize: responsiveWidth(9.0),
+            fontWeight: FontWeight.w500,
+          ));
     } else {
       return Text('');
     }
   }
 }
-
-
-
-
-
-
-
