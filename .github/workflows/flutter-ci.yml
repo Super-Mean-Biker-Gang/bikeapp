@@ -35,42 +35,42 @@ jobs:
       - name: Run tests
         run: flutter test
 
-  build_ios: 
-    name: build flutter for ios
-    needs: [test_flutter]
-    runs-on: macos-latest
+  # build_ios: 
+  #   name: build flutter for ios
+  #   needs: [test_flutter]
+  #   runs-on: macos-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: "stable"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: "stable"
 
-      - name: Install dependencies
-        run: flutter pub get
+  #     - name: Install dependencies
+  #       run: flutter pub get
 
-      - name: Clean for rebuild
-        run: flutter clean
+  #     - name: Clean for rebuild
+  #       run: flutter clean
 
-      - name: Build for ios
-        run: flutter build ios --release --no-codesign
+  #     - name: Build for ios
+  #       run: flutter build ios --release --no-codesign
 
-  build_android: 
-    name: build flutter for android
-    needs: [test_flutter]
-    runs-on: ubuntu-latest
+  # build_android: 
+  #   name: build flutter for android
+  #   needs: [test_flutter]
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: "stable"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: "stable"
 
-      - name: Install dependencies
-        run: flutter pub get
+  #     - name: Install dependencies
+  #       run: flutter pub get
 
-      - name: Clean for rebuild
-        run: flutter clean
+  #     - name: Clean for rebuild
+  #       run: flutter clean
 
-      - name: Build for android
-        run: flutter build apk
+  #     - name: Build for android
+  #       run: flutter build apk
