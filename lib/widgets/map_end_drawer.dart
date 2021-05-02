@@ -1,3 +1,4 @@
+import 'package:bikeapp/screens/add_bike_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class MapEndDrawer extends StatelessWidget {
             title: Text('Add Bike',
                 style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
             onTap: () {
-              print('Adding a bike');
+              Navigator.pushNamed(context, AddBikeScreen.routeName);
             },
           ),
           ListTile(

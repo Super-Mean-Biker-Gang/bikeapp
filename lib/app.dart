@@ -1,3 +1,5 @@
+import 'package:bikeapp/screens/accident_waver_screen.dart';
+import 'package:bikeapp/screens/add_bike_screen.dart';
 import 'package:bikeapp/screens/create_account_screen.dart';
 import 'package:bikeapp/screens/forgot_password.dart';
 import 'package:bikeapp/screens/map_screen.dart';
@@ -19,6 +21,8 @@ class _AppState extends State<App> {
     ForgotPassword.routeName: (context) => ForgotPassword(),
     CreateAccountScreen.routeName: (context) => CreateAccountScreen(),
     MapScreen.routeName: (context) => MapScreen(),
+    AccidentWaverScreen.routeName: (context) => AccidentWaverScreen(),
+    AddBikeScreen.routeName: (context) => AddBikeScreen(),
   };
 
   @override
