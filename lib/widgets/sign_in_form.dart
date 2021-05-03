@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/screens/forgot_password.dart';
+import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:bikeapp/styles/cool_button.dart';
 import 'package:bikeapp/styles/custom_input_decoration.dart';
@@ -18,6 +19,13 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController passwordController = TextEditingController();
   String email;
   String password;
+  String eMessage;
+
+  @override
+  void initState() {
+    eMessage = "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +40,9 @@ class _SignInFormState extends State<SignInForm> {
             SizedBox(height: responsiveHeight(20.0)),
             forgotPasswordText(context),
             SizedBox(height: responsiveHeight(20.0)),
-            signInButton(context, formKey),
+            signInButton(context),
+            SizedBox(height: responsiveHeight(10.0)),
+            displayErrorMessage(),
           ],
         ),
       ),
@@ -92,20 +102,42 @@ class _SignInFormState extends State<SignInForm> {
     );
   }
 
-  Widget signInButton(BuildContext context, GlobalKey<FormState> formKey) {
+  Widget signInButton(BuildContext context) {
     return CoolButton(
-      title: 'Sign in',
-      textColor: Colors.white,
-      filledColor: Colors.green,
-      onPressed: () {
-        if (formKey.currentState.validate()) {
-          formKey.currentState.save();
-          context.read<AuthenticationService>().signIn(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim(),
-              );
-        }
-      },
-    );
+        title: 'Sign in',
+        textColor: Colors.white,
+        filledColor: Colors.green,
+        onPressed: () async {
+          setState(() {
+            eMessage = "";
+          });
+          if (formKey.currentState.validate()) {
+            formKey.currentState.save();
+            try {
+              await context.read<AuthenticationService>().signIn(
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim(),
+                  );
+              Navigator.of(context).pushNamed(MapScreen.routeName);
+            } catch (error) {
+              setState(() {
+                eMessage = error.message;
+              });
+            }
+          }
+        });
+  }
+
+  Widget displayErrorMessage() {
+    if (eMessage != null) {
+      return Text(eMessage,
+          style: TextStyle(
+            color: Colors.redAccent,
+            fontSize: responsiveWidth(9.0),
+            fontWeight: FontWeight.w500,
+          ));
+    } else {
+      return Text('');
+    }
   }
 }
