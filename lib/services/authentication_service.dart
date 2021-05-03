@@ -22,7 +22,7 @@ class AuthenticationService {
           email: email, password: password);
       return "Account created";
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      return Future.error(e);
     }
   }
 

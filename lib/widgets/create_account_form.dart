@@ -1,3 +1,4 @@
+import 'package:bikeapp/screens/create_account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
@@ -80,13 +81,30 @@ class CreateAccountForm extends StatelessWidget {
           onPressed: () {
             if (_registerFormKey.currentState.validate()) {
               if (passwordController.text == confirmPasswordController.text) {
-                context.read<AuthenticationService>().createAccount(
-                    email: emailController.text.trim(),
-                    password: passwordController.text.trim());
-                context.read<AuthenticationService>().signIn(
-                    email: emailController.text.trim(),
-                    password: passwordController.text.trim());
-                Navigator.of(context).pushNamed(MapScreen.routeName);
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                          title: Text("Waiver"),
+                          // Eventually read this from a text doc
+                          content: Text(
+                              "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"),
+                          actions: <Widget>[
+                            TextButton(
+                                child: Text("I accept"),
+                                onPressed: () {
+                                  registerAndSignIn(context);
+                                }),
+                            TextButton(
+                                child: Text("Close"),
+                                onPressed: () {
+                                  Navigator.popUntil(
+                                      context,
+                                      ModalRoute.withName(
+                                          CreateAccountScreen.routeName));
+                                }),
+                          ]);
+                    });
               } else {
                 showDialog(
                     context: context,
@@ -107,5 +125,34 @@ class CreateAccountForm extends StatelessWidget {
           },
           child: Text("Create Account"),
         ));
+  }
+
+  void registerAndSignIn(BuildContext context) {
+    context
+        .read<AuthenticationService>()
+        .createAccount(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim())
+        .catchError((e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text("Error"),
+                content: Text("Account with email already exists"),
+                actions: <Widget>[
+                  TextButton(
+                      child: Text("Close"),
+                      onPressed: () {
+                        Navigator.popUntil(context,
+                            ModalRoute.withName(CreateAccountScreen.routeName));
+                      })
+                ]);
+          });
+    });
+    context.read<AuthenticationService>().signIn(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim());
+    Navigator.of(context).pushNamed(MapScreen.routeName);
   }
 }
