@@ -23,7 +23,7 @@ class AuthenticationService {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       return "Account created";
-    } on FirebaseAuthException catch(e) {
+    } on FirebaseAuthException catch (e) {
       return Future.error(e);
     }
   }

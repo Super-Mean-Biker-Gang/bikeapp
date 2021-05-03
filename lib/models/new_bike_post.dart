@@ -18,7 +18,7 @@ class NewBikePost {
     this.photoUrl = "fakeurl.com",
     this.isBeingUsed = false,
     this.lockCombo = "04-04-04",
-    this.donatedUserEmail = "someonesEmail@email.com",    
+    this.donatedUserEmail = "someonesEmail@email.com",
   ]);
 
   NewBikePost.fromMap([Map<String, dynamic> map]) {
@@ -30,6 +30,6 @@ class NewBikePost {
     this.photoUrl = map['photoUrl'];
     this.isBeingUsed = map['isBeingUsed'];
     this.lockCombo = map['lockCombo'];
-    this.donatedUserEmail = map['donatedUserEmail'];    
+    this.donatedUserEmail = map['donatedUserEmail'];
   }
 }
