@@ -18,7 +18,7 @@ class SignInScreen extends StatelessWidget {
           child: SizedBox(
             child: Container(
               padding: EdgeInsets.symmetric(
-                  vertical: responsiveHeight(35.0),
+                  vertical: responsiveHeight(25.0),
                   horizontal: responsiveWidth(15.0)),
               child: SingleChildScrollView(
                 child: Column(
@@ -41,7 +41,7 @@ class SignInScreen extends StatelessWidget {
                     ),
                     SizedBox(height: responsiveHeight(30.0)),
                     SignInForm(),
-                    SizedBox(height: responsiveHeight(52.0)),
+                    SizedBox(height: responsiveHeight(40.0)),
                     withoutAccount(context),
                   ],
                 ),
