@@ -34,97 +34,107 @@ class CreateAccountForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-            child: Form(
-                key: _registerFormKey,
-                child: Column(children: <Widget>[
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: emailValidator,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                    ),
-                    validator: passwordValidator,
-                  ),
-                  TextFormField(
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
-                    ),
-                    validator: passwordValidator,
-                  ),
-                  submitButton(context),
-                  Text("Already have an account?"),
-                  TextButton(
-                    child: Text("Login here!"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ]))));
+      padding: const EdgeInsets.all(20.0),
+      child: SingleChildScrollView(
+        child: Form(
+          key: _registerFormKey,
+          child: Column(children: <Widget>[
+            TextFormField(
+              controller: emailController,
+              decoration: InputDecoration(
+                labelText: "Email",
+              ),
+              keyboardType: TextInputType.emailAddress,
+              validator: emailValidator,
+            ),
+            TextFormField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Password",
+              ),
+              validator: passwordValidator,
+            ),
+            TextFormField(
+              controller: confirmPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Confirm Password",
+              ),
+              validator: passwordValidator,
+            ),
+            submitButton(context),
+            Text("Already have an account?"),
+            TextButton(
+              child: Text("Login here!"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ]),
+        ),
+      ),
+    );
   }
 
   Widget submitButton(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-            if (_registerFormKey.currentState.validate()) {
-              if (passwordController.text == confirmPasswordController.text) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                          title: Text("Waiver"),
-                          // Eventually read this from a text doc
-                          content: Text(
-                              "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"),
-                          actions: <Widget>[
-                            TextButton(
-                                child: Text("I accept"),
-                                onPressed: () {
-                                  registerAndSignIn(context);
-                                }),
-                            TextButton(
-                                child: Text("Close"),
-                                onPressed: () {
-                                  Navigator.popUntil(
-                                      context,
-                                      ModalRoute.withName(
-                                          CreateAccountScreen.routeName));
-                                }),
-                          ]);
-                    });
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                          title: Text("Error"),
-                          content: Text("The passwords do not match"),
-                          actions: <Widget>[
-                            TextButton(
-                                child: Text("Close"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                })
-                          ]);
-                    });
-              }
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          if (_registerFormKey.currentState.validate()) {
+            if (passwordController.text == confirmPasswordController.text) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Waiver"),
+                    // Eventually read this from a text doc
+                    content: Text(
+                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"),
+                    actions: <Widget>[
+                      TextButton(
+                          child: Text("I accept"),
+                          onPressed: () {
+                            registerAndSignIn(context);
+                          }),
+                      TextButton(
+                        child: Text("Close"),
+                        onPressed: () {
+                          Navigator.popUntil(
+                              context,
+                              ModalRoute.withName(
+                                  CreateAccountScreen.routeName));
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Error"),
+                    content: Text("The passwords do not match"),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text("Close"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             }
-          },
-          child: Text("Create Account"),
-        ));
+          }
+        },
+        child: Text("Create Account"),
+      ),
+    );
   }
 
   void registerAndSignIn(BuildContext context) {
@@ -135,20 +145,22 @@ class CreateAccountForm extends StatelessWidget {
             password: passwordController.text.trim())
         .catchError((e) {
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                title: Text("Error"),
-                content: Text("Account with email already exists"),
-                actions: <Widget>[
-                  TextButton(
-                      child: Text("Close"),
-                      onPressed: () {
-                        Navigator.popUntil(context,
-                            ModalRoute.withName(CreateAccountScreen.routeName));
-                      })
-                ]);
-          });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Account with email already exists"),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Close"),
+                  onPressed: () {
+                    Navigator.popUntil(context,
+                        ModalRoute.withName(CreateAccountScreen.routeName));
+                  }),
+            ],
+          );
+        },
+      );
     });
     context.read<AuthenticationService>().signIn(
         email: emailController.text.trim(),
