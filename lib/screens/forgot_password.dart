@@ -120,7 +120,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             await context.read<AuthenticationService>().passwordReset(
                   email: emailController.text.trim(),
                 );
-            customPopUp(context);
+            forgotPasswordPopUp(context);
           } catch (error) {
             setState(() {
               eMessage = error.message;
@@ -144,13 +144,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
 
-  void customPopUp(BuildContext context) {
+  void forgotPasswordPopUp(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Password Reset",
+            'Password Reset',
             style: TextStyle(color: Colors.white),
           ),
           content: Text(
@@ -165,14 +165,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(ForgotPassword.routeName);
+                  Navigator.popUntil(
+                      context, ModalRoute.withName(ForgotPassword.routeName));
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.green),
                 )),
             TextButton(
                 child: Text(
-                  'Begin Sign in',
+                  'Begin Sign In',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
