@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:bikeapp/screens/add_bike_screen.dart';
 import 'package:bikeapp/screens/map_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -15,7 +17,13 @@ class _AddBikeFormState extends State<AddBikeForm> {
   File image;
   LocationData locationData;
   final picker = ImagePicker();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  User user;
   TextEditingController lockComboController = new TextEditingController();
+  TextEditingController lockControllerOne = new TextEditingController();
+  TextEditingController lockControllerTwo = new TextEditingController();
+  TextEditingController lockControllerThree = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
   String imageURL;
 
   void getImage() async {
@@ -41,86 +49,147 @@ class _AddBikeFormState extends State<AddBikeForm> {
   @override
   void initState() {
     super.initState();
+    user = auth.currentUser;
     retrieveLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (image == null) {
-      getImage();
-      return Center(
-          child: ElevatedButton(
-              child: Text('Select Photo'),
-              onPressed: () {
-                getImage();
-              }));
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Icon(Icons.arrow_back)),
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          showImage(context),
+          TextField(
+            controller: nameController,
+            decoration: InputDecoration(
+              hintText: "Bike Name",
+            ),
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.text,
           ),
-          title: Text("Add A Bike"),
-          centerTitle: true,
-        ),
-        body: ListView(children: [
-          Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.file(image),
-              SizedBox(height: 40),
-              TextField(
-                controller: lockComboController,
-                decoration: InputDecoration(
-                  hintText: "Lock Combination",
-                ),
-                textAlign: TextAlign.center,
-                // Change to three numbered fields and convert later
-                keyboardType: TextInputType.text,
-              ),
-              SizedBox(height: 80),
-              FractionallySizedBox(
-                widthFactor: 1,
-                child: ElevatedButton(
-                  child: Text('Add Bike!'),
-                  onPressed: () {
-                    retrieveLocation();
-                    FirebaseFirestore.instance.collection('bikes').add({
-                      'bikeName':
-                          'Bike Name', // Will add appropriate form spot later
-                      'latitude':
-                          locationData != null ? locationData.latitude : 45,
-                      'longitude':
-                          locationData != null ? locationData.longitude : 30,
-                      'tags': [
-                        'Tag1',
-                        'Tag2'
-                      ], // Will add appropriate spot in form later
-                      'rating':
-                          null, // Not sure how we want bike ratings to start before being used
-                      'photoUrl': imageURL,
-                      'isBeingUsed': false,
-                      'lockCombo': lockComboController.text != ""
-                          ? lockComboController.text
-                          : "0",
-                      'donatedUserEmail':
-                          "userEmail@email.com", // Will add logic to determined logged in user's email
-                    });
-                    //Navigator.popUntil(context, ModalRoute.withName(MapScreen.routeName));
-                    Navigator.pushNamed(context, MapScreen.routeName);
-                  },
-                ),
-              )
-            ],
-          )),
+          SizedBox(height: 60),
+          lockInput(context),
+          SizedBox(height: 40),
+          ElevatedButton(
+            child: Text('Select Photo'),
+            onPressed: () {
+              getImage();
+            },
+          ),
+          SizedBox(height: 40),
+          FractionallySizedBox(
+            widthFactor: 1,
+            child: ElevatedButton(
+              child: Text('Add Bike!'),
+              onPressed: () {
+                submitAddBike();
+              },
+            ),
+          ),
         ]),
+      ),
+    );
+  }
+
+  Widget lockInput(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 80),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(
+            child: TextField(
+              controller: lockControllerOne,
+              decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          SizedBox(width: 20.0),
+          Flexible(
+            child: TextField(
+              controller: lockControllerTwo,
+              decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          SizedBox(width: 20.0),
+          Flexible(
+            child: TextField(
+              controller: lockControllerThree,
+              decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showImage(BuildContext context) {
+    if (image != null) {
+      return Image.file(image);
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 100.0),
+        child: Placeholder(fallbackHeight: 160),
       );
     }
+  }
+
+  void submitAddBike() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Waiver"),
+          // Eventually read this from a text doc
+          content: Text(
+              "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("I accept"),
+              onPressed: () {
+                retrieveLocation();
+                FirebaseFirestore.instance.collection('bikes').add({
+                  'bikeName': nameController.text != ""
+                      ? nameController.text.trim()
+                      : "Unnamed",
+                  'latitude': locationData != null ? locationData.latitude : 45,
+                  'longitude':
+                      locationData != null ? locationData.longitude : 30,
+                  'tags': [
+                    'Tag1',
+                    'Tag2'
+                  ], // Will add appropriate spot in form later
+                  'rating': null,
+                  'photoUrl': imageURL,
+                  'isBeingUsed': false,
+                  'lockCombo': lockControllerOne.text != ""
+                      ? (lockControllerOne.text +
+                          "-" +
+                          lockControllerTwo.text +
+                          "-" +
+                          lockControllerThree.text)
+                      : "No Combo Entered",
+                  'donatedUserEmail':
+                      user != null ? user.email : "default@email.com",
+                });
+                Navigator.pushNamed(context, MapScreen.routeName);
+              },
+            ),
+            TextButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.popUntil(
+                    context, ModalRoute.withName(AddBikeScreen.routeName));
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
