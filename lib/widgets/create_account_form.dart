@@ -1,6 +1,6 @@
 import 'package:bikeapp/screens/create_account_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:bikeapp/screens/map_screen.dart';
+import 'package:bikeapp/screens/sign_in_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 
@@ -162,9 +162,6 @@ class CreateAccountForm extends StatelessWidget {
         },
       );
     });
-    context.read<AuthenticationService>().signIn(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim());
-    Navigator.of(context).pushNamed(MapScreen.routeName);
+    Navigator.of(context).pushNamed(SignInScreen.routeName);
   }
 }

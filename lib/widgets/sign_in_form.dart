@@ -118,7 +118,15 @@ class _SignInFormState extends State<SignInForm> {
                     email: emailController.text.trim(),
                     password: passwordController.text.trim(),
                   );
-              Navigator.of(context).pushNamed(MapScreen.routeName);
+              if (await context
+                  .read<AuthenticationService>()
+                  .isEmailVerified()) {
+                Navigator.of(context).pushNamed(MapScreen.routeName);
+              } else {
+                context.read<AuthenticationService>().emailVerification();
+                print("email verification is needed");
+                emailVerificationPopUp(context);
+              }
             } catch (error) {
               setState(() {
                 eMessage = error.message;
@@ -139,5 +147,37 @@ class _SignInFormState extends State<SignInForm> {
     } else {
       return Text('');
     }
+  }
+
+  void emailVerificationPopUp(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Please verify your account',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'Verification link has been sent to your email',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Theme.of(context).primaryColor,
+          actions: [
+            TextButton(
+                child: Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                )),
+          ],
+        );
+      },
+    );
   }
 }

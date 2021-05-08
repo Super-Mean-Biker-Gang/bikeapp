@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:flutter/services.dart';
 
 // Followed along with video https://www.youtube.com/watch?v=oJ5Vrya3wCQ
 
@@ -36,5 +35,13 @@ class AuthenticationService {
 
   Future<void> passwordReset({String email}) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> emailVerification() async {
+    await getUser().sendEmailVerification();
+  }
+
+  Future<bool> isEmailVerified() async {
+    return getUser().emailVerified;
   }
 }
