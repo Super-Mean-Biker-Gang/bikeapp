@@ -29,6 +29,12 @@ class MapSearchBar extends StatelessWidget {
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(left: 45, right: 85),
             ),
+            onTap: () async {
+              print('Creating suggestions bar');
+            },
+            onSubmitted: (String str) {
+              print('submitting results');
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
