@@ -76,13 +76,12 @@ class MapScreenState extends State<MapScreen> {
       endDrawer: MapEndDrawer(),
       drawer: MapDrawer(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          determinePosition();
-        },
-        tooltip: 'Center map on Location',
-        child: Icon(Icons.my_location),
-        backgroundColor: Colors.blue
-      ),
+          onPressed: () {
+            determinePosition();
+          },
+          tooltip: 'Center map on Location',
+          child: Icon(Icons.my_location),
+          backgroundColor: Colors.blue),
     );
   }
 }

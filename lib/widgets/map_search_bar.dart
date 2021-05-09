@@ -13,7 +13,8 @@ class MapSearchBar extends StatelessWidget {
           left: queryData.size.width * .05, right: queryData.size.width * .05),
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Colors.cyanAccent, width: responsiveHeight(1.0)),
+          border: Border.all(
+              color: Colors.cyanAccent, width: responsiveHeight(1.0)),
           borderRadius: BorderRadius.all(Radius.circular(50))),
       child: Stack(
         children: [
