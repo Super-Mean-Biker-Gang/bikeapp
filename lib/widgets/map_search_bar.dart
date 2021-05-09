@@ -26,7 +26,7 @@ class MapSearchBar extends StatelessWidget {
               hintStyle: TextStyle(fontSize: queryData.textScaleFactor * 25),
               hintText: 'Search a location',
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(left: 55),
+              contentPadding: EdgeInsets.only(left: 45, right: 85),
             ),
           ),
           Row(
