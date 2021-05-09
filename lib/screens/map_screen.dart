@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bikeapp/widgets/map_end_drawer.dart';
 import 'package:bikeapp/widgets/map_drawer.dart';
 import 'package:bikeapp/widgets/map_view.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -27,46 +27,45 @@ class MapScreenState extends State<MapScreen> {
     controller.animateCamera(CameraUpdate.newCameraPosition(position));
   }
 
-  void setUserPosition(Position position) {
-    if (position.latitude != null && position.longitude != null) {
+  void setUserPosition(LocationData location) {
+    if (location.latitude != null && location.longitude != null) {
       _userPosition = CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
+        target: LatLng(location.latitude, location.longitude),
         zoom: 14.4746,
       );
     }
   }
 
   determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    Location location = Location();
 
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
 
-    if (!serviceEnabled) {
-      print('Location services are disabled.');
-    }
+    // Check if service is enabled
+    _serviceEnabled = await location.serviceEnabled();
 
-    // Check permissions
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        print('Location permissions are denied');
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
         return;
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      print(
-          'Location permissions are permanently denied, we cannot request permissions.');
-      return;
+    // Check and request permissions if needed
+    _permissionGranted = await location.hasPermission();
+
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
     }
 
-    Position position = await Geolocator.getCurrentPosition();
-    setUserPosition(position);
+    // Get location and pass it to set user location
+    _locationData = await location.getLocation();
+    setUserPosition(_locationData);
     goToPosition(_userPosition);
   }
 
