@@ -82,6 +82,7 @@ class MapScreenState extends State<MapScreen> {
         },
         tooltip: 'Center map on Location',
         child: Icon(Icons.my_location),
+        backgroundColor: Colors.blue
       ),
     );
   }
