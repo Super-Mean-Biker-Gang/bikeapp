@@ -83,11 +83,11 @@ class MapScreenState extends State<MapScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Align(
-              alignment: Alignment.topCenter,
-              child:Text("No Address found")),
+                alignment: Alignment.topCenter,
+                child: Text("No Address found")),
             content: Text(
-              "We looked for the address you entered but didn't find it. Please check the address and try again.", 
-              textAlign: TextAlign.center),
+                "We looked for the address you entered but didn't find it. Please check the address and try again.",
+                textAlign: TextAlign.center),
             actions: <Widget>[
               TextButton(
                 child: Text("Close"),
