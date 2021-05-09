@@ -70,12 +70,37 @@ class MapScreenState extends State<MapScreen> {
   // Geocode an address queried from an entered string and move to
   // That position on the map
   geocodeAddress(String query) async {
-    var addresses = await Geocoder.local.findAddressesFromQuery(query);
-    var first = addresses.first;
-    var latitude = first.coordinates.latitude;
-    var longitude = first.coordinates.longitude;
-    setSearchedPosition(latitude, longitude);
-    goToPosition(_searchedPosition);
+    try {
+      var addresses = await Geocoder.local.findAddressesFromQuery(query);
+      var first = addresses.first;
+      var latitude = first.coordinates.latitude;
+      var longitude = first.coordinates.longitude;
+      setSearchedPosition(latitude, longitude);
+      goToPosition(_searchedPosition);
+    } catch (err) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Align(
+              alignment: Alignment.topCenter,
+              child:Text("No Address found")),
+            content: Text(
+              "We looked for the address you entered but didn't find it. Please check the address and try again.", 
+              textAlign: TextAlign.center),
+            actions: <Widget>[
+              TextButton(
+                child: Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  searchController.clear();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   // Determine if ocation services are enabled and permission is granted
