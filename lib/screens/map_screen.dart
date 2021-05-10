@@ -6,13 +6,11 @@ import 'package:bikeapp/widgets/map_drawer.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_config/flutter_config.dart';
-// import 'package:flutter_google_places/flutter_google_places.dart';
-// import 'package:google_maps_webservice/places.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:location/location.dart' as Location;
+import 'package:dio/dio.dart';
 
 final apiKey = FlutterConfig.get('API_KEY');
-// GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: apiKey);
 
 class MapScreen extends StatefulWidget {
   static const routeName = 'map_screen';
@@ -24,8 +22,16 @@ class MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
   TextEditingController searchController = TextEditingController();
 
+  // Create a controller and state key to open or close the bottomsheet
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  PersistentBottomSheetController sheetController;
+
   // Keeps track of the location permission state
   var isLocationGranted = false;
+  // Create a timer to keep an http call open for only a short call
+  Timer timer;
+
+  List<String> suggestions = [];
 
   static CameraPosition _userPosition;
   static CameraPosition _searchedPosition;
@@ -36,9 +42,18 @@ class MapScreenState extends State<MapScreen> {
     zoom: 14.4746,
   );
 
+  @override
   void initState() {
     super.initState();
     determinePosition();
+    searchController.addListener(onSearchChanged);
+  }
+
+  // Dispose if the search controller when it is no longer needed.
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   // Move the camera to a given position
@@ -143,9 +158,105 @@ class MapScreenState extends State<MapScreen> {
     goToPosition(_userPosition);
   }
 
+  // Open the bottom sheet and fill it with autocomplete suggestions
+  openAutocompleteBottomSheet(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    sheetController = scaffoldKey.currentState.showBottomSheet<Null>(
+      (BuildContext context) {
+        return Wrap(children: [
+          Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                'suggestions',
+                style: TextStyle(
+                  fontSize: queryData.textScaleFactor * 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: suggestions.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(suggestions[index]),
+                onTap: () {
+                  searchController.text = suggestions[index];
+                  geocodeAddress(searchController.text);
+                  searchController.clear();
+                  closeBottomSheet();
+                  FocusScope.of(context).unfocus();
+                },
+              );
+            },
+          ),
+        ]);
+      },
+    );
+  }
+
+  // Close the bottom sheet
+  void closeBottomSheet() {
+    if (sheetController != null) {
+      sheetController.close();
+      sheetController = null;
+    }
+  }
+
+  // Start a timer for a http call for autocomplete when search text changes
+  onSearchChanged() {
+    if (timer?.isActive ?? false) timer.cancel();
+    timer = Timer(const Duration(milliseconds: 500), () {
+      getLocationResults(searchController.text);
+    });
+  }
+
+  // Send an http call to google places api
+  // Parse the results and pass them to the suggestions list
+  getLocationResults(String searchInput) async {
+    List<String> results = [];
+    List<String> temp = [];
+    String baseURL =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+
+    String request = '$baseURL?input=$searchInput&key=$apiKey';
+
+    Response response = await Dio().get(request);
+
+    var predictions = response.data['predictions'];
+
+    if (predictions.length <= 4) {
+      for (var i = 0; i < predictions.length; i++) {
+        String name = predictions[i]['description'];
+        temp.add(name);
+      }
+    } else {
+      for (var i = 0; i < predictions.length; i++) {
+        String name = predictions[i]['description'];
+        results.add(name);
+      }
+      temp = results.take(4).toList();
+    }
+    setState(() {
+      suggestions = temp;
+      if (suggestions.isNotEmpty) {
+        openAutocompleteBottomSheet(context);
+      }
+    });
+  }
+
+  ////////////////// Widgets below this point ///////////////////////
+
+  // Build the actual pageview
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: mapView(context),
       endDrawer: MapEndDrawer(),
       drawer: MapDrawer(),
@@ -190,11 +301,14 @@ class MapScreenState extends State<MapScreen> {
                 contentPadding: EdgeInsets.only(left: 50, right: 85),
               ),
               onTap: () {
-                print('Creating suggestions bar');
+                if (suggestions.isNotEmpty) {
+                  openAutocompleteBottomSheet(context);
+                }
               },
               onSubmitted: (context) {
                 geocodeAddress(searchController.text);
                 searchController.clear();
+                closeBottomSheet();
               },
             ),
             Row(
