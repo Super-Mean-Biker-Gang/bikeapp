@@ -185,9 +185,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
   }
 
   void submitAddBike() {
-    print("\n\n\n\n\nTAGS ARE BELOW!!!\n");
-    print(tags);
-    print("TAGS ARE ABOVE!!!!\n\n\n\n\n");
     showDialog(
       context: context,
       builder: (BuildContext context) {
