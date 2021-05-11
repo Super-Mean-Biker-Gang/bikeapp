@@ -35,6 +35,8 @@ dependencies:
   flutter_google_places: ^0.3.0
   geolocator: ^7.0.3
   grouped_buttons: ^1.0.4
+  geocoder: ^0.2.1
+  dio: ^4.0.0
 
 dev_dependencies:
   flutter_config: ^2.0.0
