@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bikeapp/models/responsive_size.dart';
 
 class MapSearchBar extends StatelessWidget {
   @override
@@ -12,7 +13,8 @@ class MapSearchBar extends StatelessWidget {
           left: queryData.size.width * .05, right: queryData.size.width * .05),
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Colors.grey),
+          border: Border.all(
+              color: Colors.cyanAccent, width: responsiveHeight(1.0)),
           borderRadius: BorderRadius.all(Radius.circular(50))),
       child: Stack(
         children: [
@@ -25,8 +27,14 @@ class MapSearchBar extends StatelessWidget {
               hintStyle: TextStyle(fontSize: queryData.textScaleFactor * 25),
               hintText: 'Search a location',
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(left: 55),
+              contentPadding: EdgeInsets.only(left: 45, right: 85),
             ),
+            onTap: () async {
+              print('Creating suggestions bar');
+            },
+            onSubmitted: (String str) {
+              print('submitting results');
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,7 +55,7 @@ class MapSearchBar extends StatelessWidget {
                     },
                     tooltip: 'Filter bikes',
                     icon: Icon(Icons.filter_alt,
-                        color: Colors.blue,
+                        color: Colors.purpleAccent,
                         size: queryData.textScaleFactor * 40),
                   ),
                   IconButton(
