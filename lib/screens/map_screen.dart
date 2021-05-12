@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/widgets/map_end_drawer.dart';
 import 'package:bikeapp/widgets/map_drawer.dart';
 import 'dart:async';
@@ -9,8 +8,18 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:location/location.dart' as Location;
 import 'package:dio/dio.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
 
 final apiKey = FlutterConfig.get('API_KEY');
+
+/*
+Sources: 
+  https://medium.com/flutter-community/google-maps-in-flutter-i-feeb72354392
+  https://medium.com/flutter-community/google-maps-in-flutter-ii-260f43db5924
+  https://medium.com/flutter-community/ad-custom-marker-images-for-your-google-maps-in-flutter-68ce627107fc
+*/
 
 class MapScreen extends StatefulWidget {
   static const routeName = 'map_screen';
@@ -30,23 +39,26 @@ class MapScreenState extends State<MapScreen> {
   var isLocationGranted = false;
   // Create a timer to keep an http call open for only a short call
   Timer timer;
+  Widget _mapBody;
+  double _latitude;
+  double _longitude;
+  List<geocoding.Placemark> placemarks;
+  bool mapToggle = false;
+  Map<MarkerId, Marker> mapMarkers = <MarkerId, Marker>{};
+  BitmapDescriptor bikeIcon;
 
   List<String> suggestions = [];
 
   static CameraPosition _userPosition;
   static CameraPosition _searchedPosition;
 
-  // Initial Position in Downtown Denver, CO
-  final CameraPosition _defaultPosition = CameraPosition(
-    target: LatLng(39.7527, -105.0017),
-    zoom: 14.4746,
-  );
-
   @override
   void initState() {
     super.initState();
     determinePosition();
     searchController.addListener(onSearchChanged);
+    fetchDataFromDB();
+    customBikeIcon();
   }
 
   // Dispose if the search controller when it is no longer needed.
@@ -149,13 +161,63 @@ class MapScreenState extends State<MapScreen> {
 
     // Get location and pass it to set user location
     _locationData = await location.getLocation();
-
-    // Change the state to trigger a map rebuild with the users location icon
-    setState(() {
-      isLocationGranted = true;
-    });
+    getLoc(_locationData);
     setUserPosition(_locationData);
     goToPosition(_userPosition);
+  }
+
+  // Set the state for the map body, user location and toggle
+  void getLoc(Location.LocationData location) async {
+    setState(() {
+      isLocationGranted = true;
+      _latitude = location.latitude;
+      _longitude = location.longitude;
+      _mapBody = googleMap();
+      mapToggle = true;
+    });
+    placemarkInfo(_latitude, _longitude);
+  }
+
+  // Update the map with the placemarkers
+  void placemarkInfo(double latitude, double longitude) async {
+    placemarks = await geocoding.placemarkFromCoordinates(latitude, longitude);
+    setState(() {
+      _mapBody = googleMap();
+    });
+  }
+
+  // Get each item from the database and add it to the markers list
+  void fetchDataFromDB() async {
+    FirebaseFirestore.instance.collection('bikes').get().then((doc) {
+      if (doc.docs.isNotEmpty) {
+        for (int i = 0; i < doc.docs.length; ++i) {
+          createMarker(doc.docs[i].data(), doc.docs[i].id);
+        }
+      }
+    });
+  }
+
+  // Create a marker for each item and add it to the list
+  void createMarker(field, docID) {
+    var value = docID;
+    final MarkerId markerId = MarkerId(value);
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(field['latitude'], field['longitude']),
+      icon: bikeIcon,
+      infoWindow:
+          InfoWindow(title: field['bikeName'], snippet: field['rating']),
+    );
+    setState(() {
+      mapMarkers[markerId] = marker;
+      print(markerId);
+    });
+  }
+
+  // Set the value of the bike icon from assets
+  void customBikeIcon() async {
+    bikeIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 3.5), 'assets/purple_bike.png');
   }
 
   // Open the bottom sheet and fill it with autocomplete suggestions
@@ -282,8 +344,7 @@ class MapScreenState extends State<MapScreen> {
             right: queryData.size.width * .05),
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(
-              color: Colors.cyanAccent, width: responsiveHeight(1.0)),
+          border: Border.all(color: Colors.cyanAccent, width: 2),
           borderRadius: BorderRadius.all(Radius.circular(50)),
         ),
         child: Stack(
@@ -360,16 +421,20 @@ class MapScreenState extends State<MapScreen> {
         width: queryData.size.width * 1,
         child: Stack(
           children: [
-            GoogleMap(
-              mapType: MapType.hybrid,
-              initialCameraPosition: _defaultPosition,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              myLocationEnabled: isLocationGranted,
-              compassEnabled: true,
-              myLocationButtonEnabled: false,
-              zoomControlsEnabled: false,
+            Container(
+              child: mapToggle
+                ? _mapBody
+                : SpinKitChasingDots(
+                    itemBuilder: (BuildContext context, int index) {
+                      return DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: index.isEven
+                            ? Colors.purple[600]
+                            : Colors.blueAccent,
+                        ),
+                      );
+                    },
+                  ),
             ),
             Padding(
                 padding: EdgeInsets.only(top: queryData.size.height * .10),
@@ -377,6 +442,25 @@ class MapScreenState extends State<MapScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  // Widget that displays the google map
+  Widget googleMap() {
+    return GoogleMap(
+      mapType: MapType.normal,
+      markers: Set<Marker>.of(mapMarkers.values),
+      initialCameraPosition: CameraPosition(
+        target: LatLng(_latitude, _longitude),
+        zoom: 12,
+      ),
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
+      myLocationEnabled: isLocationGranted,
+      compassEnabled: true,
+      myLocationButtonEnabled: false,
+      zoomControlsEnabled: false,
     );
   }
 }

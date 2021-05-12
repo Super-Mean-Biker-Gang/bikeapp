@@ -45,9 +45,9 @@ class _AppState extends State<App> {
         ),
         debugShowCheckedModeBanner: false,
         routes: routes,
-        //home: AuthenticationWrapper(),
+        home: AuthenticationWrapper(),
         //home: SignInScreen(),
-        home: MapView(),
+        // home: MapView(),
       ),
     );
   }

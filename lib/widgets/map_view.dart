@@ -1,4 +1,4 @@
-import 'dart:async';
+// import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:bikeapp/widgets/map_search_bar.dart';
+// import 'package:bikeapp/widgets/map_search_bar.dart';
 
 /*
 Sources: 
@@ -28,7 +28,7 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> {
-  GoogleMapController _controller;
+  // GoogleMapController _controller;
   Location location = Location();
   LocationData locationData;
   Widget _mapBody;
@@ -142,7 +142,7 @@ class _MapViewState extends State<MapView> {
       ),
       onMapCreated: (GoogleMapController controller) {
         //widget._controller.complete(controller);
-        _controller = controller;
+        // _controller = controller;
       },
       myLocationEnabled: true,
       compassEnabled: true,
