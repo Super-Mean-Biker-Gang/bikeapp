@@ -8,6 +8,7 @@ import 'package:bikeapp/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:bikeapp/widgets/map_view.dart';
 
 class App extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _AppState extends State<App> {
     MapScreen.routeName: (context) => MapScreen(),
     AccidentWaverScreen.routeName: (context) => AccidentWaverScreen(),
     AddBikeScreen.routeName: (context) => AddBikeScreen(),
+    MapView.routeName: (context) => MapView()
   };
 
   @override
@@ -44,7 +46,8 @@ class _AppState extends State<App> {
         debugShowCheckedModeBanner: false,
         routes: routes,
         //home: AuthenticationWrapper(),
-        home: SignInScreen(),
+        //home: SignInScreen(),
+        home: MapView(),
       ),
     );
   }
