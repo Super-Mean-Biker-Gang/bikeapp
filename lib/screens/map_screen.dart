@@ -423,18 +423,18 @@ class MapScreenState extends State<MapScreen> {
           children: [
             Container(
               child: mapToggle
-                ? _mapBody
-                : SpinKitChasingDots(
-                    itemBuilder: (BuildContext context, int index) {
-                      return DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: index.isEven
-                            ? Colors.purple[600]
-                            : Colors.blueAccent,
-                        ),
-                      );
-                    },
-                  ),
+                  ? _mapBody
+                  : SpinKitChasingDots(
+                      itemBuilder: (BuildContext context, int index) {
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: index.isEven
+                                ? Colors.purple[600]
+                                : Colors.blueAccent,
+                          ),
+                        );
+                      },
+                    ),
             ),
             Padding(
                 padding: EdgeInsets.only(top: queryData.size.height * .10),
