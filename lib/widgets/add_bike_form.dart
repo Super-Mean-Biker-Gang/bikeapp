@@ -101,9 +101,10 @@ class _AddBikeFormState extends State<AddBikeForm> {
           ),
           SizedBox(height: 40),
           TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              hintText: "Bike Name",
+              controller: nameController,
+              decoration: InputDecoration(
+                hintText: "Bike Name",
+              )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: TextField(
