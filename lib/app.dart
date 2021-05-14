@@ -46,8 +46,6 @@ class _AppState extends State<App> {
         debugShowCheckedModeBanner: false,
         routes: routes,
         home: AuthenticationWrapper(),
-        //home: SignInScreen(),
-        // home: MapView(),
       ),
     );
   }
@@ -61,8 +59,9 @@ class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
+    final user = AuthenticationService(FirebaseAuth.instance).getUser();
 
-    if (firebaseUser != null) {
+    if (firebaseUser != null && user.emailVerified) {
       return MapScreen();
     }
     return SignInScreen();
