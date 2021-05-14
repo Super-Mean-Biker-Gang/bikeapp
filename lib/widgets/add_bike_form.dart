@@ -31,7 +31,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
   String _waverMessage;
 
   void getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);    
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
     image = File(pickedFile.path);
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage
@@ -44,7 +44,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
     setState(() {});
   }
 
-  void takePhoto() async {    
+  void takePhoto() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     image = File(pickedFile.path);
     FirebaseStorage storage = FirebaseStorage.instance;
@@ -108,8 +108,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
           ),
           SizedBox(height: 60),
           lockInput(context),
-          
-
           SizedBox(height: 40),
           FractionallySizedBox(
             widthFactor: 1,

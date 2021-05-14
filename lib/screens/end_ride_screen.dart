@@ -1,4 +1,3 @@
-
 import 'package:bikeapp/widgets/end_ride_form.dart';
 import 'package:flutter/material.dart';
 
