@@ -1,4 +1,4 @@
-class NewBikePost {
+class Bike {
   String bikeName;
   double latitude;
   double longitude;
@@ -6,10 +6,12 @@ class NewBikePost {
   int rating;
   String photoUrl;
   bool isBeingUsed;
+  DateTime checkoutTime;
+  String riderEmail;
   String lockCombo;
   String donatedUserEmail;
 
-  NewBikePost([
+  Bike([
     this.bikeName = "Bike's Name",
     this.latitude = 4.0,
     this.longitude = 4.0,
@@ -21,7 +23,7 @@ class NewBikePost {
     this.donatedUserEmail = "someonesEmail@email.com",
   ]);
 
-  NewBikePost.fromMap([Map<String, dynamic> map]) {
+  Bike.fromMap([Map<String, dynamic> map]) {
     this.bikeName = map['bikeName'];
     this.latitude = map['latidude'];
     this.longitude = map['longitude'];
@@ -29,6 +31,8 @@ class NewBikePost {
     this.rating = map['rating'];
     this.photoUrl = map['photoUrl'];
     this.isBeingUsed = map['isBeingUsed'];
+    this.checkoutTime = map['checkoutTime'];
+    this.riderEmail = map['riderEmail'];
     this.lockCombo = map['lockCombo'];
     this.donatedUserEmail = map['donatedUserEmail'];
   }
