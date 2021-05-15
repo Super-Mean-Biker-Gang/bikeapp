@@ -1,13 +1,16 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bikeapp/screens/add_bike_screen.dart';
 import 'package:bikeapp/screens/map_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
+
+const WAVER_PATH = 'assets/text_files/donateBikeWaver.txt';
 
 class AddBikeForm extends StatefulWidget {
   @override
@@ -25,10 +28,25 @@ class _AddBikeFormState extends State<AddBikeForm> {
   TextEditingController lockControllerThree = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
   String imageURL;
+  String _waverMessage;
   List<String> tags = [];
 
   void getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    image = File(pickedFile.path);
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage
+        .ref()
+        .child("image " + DateTime.now().toString()); // need better name
+    UploadTask uploadTask = ref.putFile(image);
+    uploadTask.then((res) async {
+      imageURL = await res.ref.getDownloadURL();
+    });
+    setState(() {});
+  }
+
+  void takePhoto() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
     image = File(pickedFile.path);
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage
@@ -52,6 +70,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
     super.initState();
     user = auth.currentUser;
     retrieveLocation();
+    loadText();
   }
 
   @override
@@ -62,6 +81,30 @@ class _AddBikeFormState extends State<AddBikeForm> {
           SizedBox(height: 20),
           showImage(context),
           SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                child: Text('Select Photo'),
+                onPressed: () {
+                  getImage();
+                },
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                child: Text('Use Camera'),
+                onPressed: () {
+                  takePhoto();
+                },
+              ),
+            ],
+          ),
+          SizedBox(height: 40),
+          TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                hintText: "Bike Name",
+              )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: TextField(
@@ -191,8 +234,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
         return AlertDialog(
           title: Text("Waiver"),
           // Eventually read this from a text doc
-          content: Text(
-              "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"),
+          content: Text(_waverMessage),
           actions: <Widget>[
             TextButton(
               child: Text("I accept"),
@@ -233,5 +275,13 @@ class _AddBikeFormState extends State<AddBikeForm> {
         );
       },
     );
+  }
+
+  Future loadText() async {
+    String message = await rootBundle.loadString(WAVER_PATH);
+    // return message;
+    setState(() {
+      _waverMessage = message;
+    });
   }
 }

@@ -1,17 +1,35 @@
-import 'package:bikeapp/screens/create_account_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:bikeapp/screens/create_account_screen.dart';
 import 'package:bikeapp/screens/sign_in_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:provider/provider.dart';
 
-class CreateAccountForm extends StatelessWidget {
+const WAVER_PATH = 'assets/text_files/registerWaver.txt';
+
+String _waverMessage;
+
+class CreateAccountForm extends StatefulWidget {
+  @override
+  _CreateAccountFormState createState() => _CreateAccountFormState();
+}
+
+class _CreateAccountFormState extends State<CreateAccountForm> {
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  // Email Validation and password matching from https://heartbeat.fritz.ai/firebase-user-authentication-in-flutter-1635fb175675
+  @override
+  void initState() {
+    super.initState();
+    loadText();
+  }
+
   String emailValidator(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -90,8 +108,7 @@ class CreateAccountForm extends StatelessWidget {
                   return AlertDialog(
                     title: Text("Waiver"),
                     // Eventually read this from a text doc
-                    content: Text(
-                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"),
+                    content: Text(_waverMessage),
                     actions: <Widget>[
                       TextButton(
                           child: Text("I accept"),
@@ -163,5 +180,10 @@ class CreateAccountForm extends StatelessWidget {
       );
     });
     Navigator.of(context).pushNamed(SignInScreen.routeName);
+  }
+
+  Future loadText() async {
+    _waverMessage = await rootBundle.loadString(WAVER_PATH);
+    print(_waverMessage);
   }
 }
