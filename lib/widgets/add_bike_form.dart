@@ -33,7 +33,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
 
   void getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if(pickedFile != null) {
+    if (pickedFile != null) {
       image = File(pickedFile.path);
       FirebaseStorage storage = FirebaseStorage.instance;
       Reference ref = storage
@@ -49,8 +49,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
 
   void takePhoto() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
-    
-    if(pickedFile != null) {
+
+    if (pickedFile != null) {
       image = File(pickedFile.path);
       FirebaseStorage storage = FirebaseStorage.instance;
       Reference ref = storage
