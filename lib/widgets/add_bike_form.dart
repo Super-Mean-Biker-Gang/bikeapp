@@ -33,30 +33,35 @@ class _AddBikeFormState extends State<AddBikeForm> {
 
   void getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    image = File(pickedFile.path);
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage
-        .ref()
-        .child("image " + DateTime.now().toString()); // need better name
-    UploadTask uploadTask = ref.putFile(image);
-    uploadTask.then((res) async {
-      imageURL = await res.ref.getDownloadURL();
-    });
-    setState(() {});
+    if(pickedFile != null) {
+      image = File(pickedFile.path);
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child("image " + DateTime.now().toString()); // need better name
+      UploadTask uploadTask = ref.putFile(image);
+      uploadTask.then((res) async {
+        imageURL = await res.ref.getDownloadURL();
+      });
+      setState(() {});
+    }
   }
 
   void takePhoto() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
-    image = File(pickedFile.path);
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage
-        .ref()
-        .child("image " + DateTime.now().toString()); // need better name
-    UploadTask uploadTask = ref.putFile(image);
-    uploadTask.then((res) async {
-      imageURL = await res.ref.getDownloadURL();
-    });
-    setState(() {});
+    
+    if(pickedFile != null) {
+      image = File(pickedFile.path);
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child("image " + DateTime.now().toString()); // need better name
+      UploadTask uploadTask = ref.putFile(image);
+      uploadTask.then((res) async {
+        imageURL = await res.ref.getDownloadURL();
+      });
+      setState(() {});
+    }
   }
 
   void retrieveLocation() async {
@@ -100,11 +105,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
             ],
           ),
           SizedBox(height: 40),
-          TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                hintText: "Bike Name",
-              )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: TextField(
@@ -214,15 +214,16 @@ class _AddBikeFormState extends State<AddBikeForm> {
     return Column(
       children: [
         CheckboxGroup(
-            labels: <String>["Road Bike", "Mountain Bike", "Hybrid"],
-            onChange: (bool isChecked, String label, int index) {
-              if (isChecked && !tags.contains(label)) {
-                tags.add(label);
-              } else if (!isChecked && tags.contains(label)) {
-                tags.remove(label);
-              }
-              setState(() {});
-            }),
+          labels: <String>["Road Bike", "Mountain Bike", "Hybrid"],
+          onChange: (bool isChecked, String label, int index) {
+            if (isChecked && !tags.contains(label)) {
+              tags.add(label);
+            } else if (!isChecked && tags.contains(label)) {
+              tags.remove(label);
+            }
+            setState(() {});
+          },
+        ),
       ],
     );
   }
