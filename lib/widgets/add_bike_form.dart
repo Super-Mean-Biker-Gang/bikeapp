@@ -120,13 +120,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
           Text("Lock Combination"),
           lockInput(context),
           SizedBox(height: 40),
-          ElevatedButton(
-            child: Text('Select Photo'),
-            onPressed: () {
-              getImage();
-            },
-          ),
-          SizedBox(height: 40),
           bikeTagCheckBoxes(context),
           SizedBox(height: 20),
           FractionallySizedBox(
