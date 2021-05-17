@@ -131,6 +131,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
               },
             ),
           ),
+          SizedBox(height: 20),
         ]),
       ),
     );
@@ -192,13 +193,20 @@ class _AddBikeFormState extends State<AddBikeForm> {
   }
 
   Widget showImage(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
     if (image != null) {
       return Image.file(image);
     } else {
       // Placeholder for when image has not been selected
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 100.0),
-        child: Placeholder(fallbackHeight: 160),
+        padding: EdgeInsets.only(right: 0, left: 25),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.image_search, size: queryData.size.width * .80)
+          ]
+        ),
       );
     }
   }
