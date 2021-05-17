@@ -27,7 +27,8 @@ class Bike {
     this.bikeName = map['bikeName'];
     this.latitude = map['latidude'];
     this.longitude = map['longitude'];
-    this.tags = map['tags'];
+    //this.tags = map['tags'];
+    this.tags = ['a', 'b', 'c']; // DELETE LATER
     this.rating = map['rating'];
     this.photoUrl = map['photoUrl'];
     this.isBeingUsed = map['isBeingUsed'];

@@ -1,6 +1,7 @@
 import 'package:bikeapp/screens/accident_waver_screen.dart';
 import 'package:bikeapp/screens/add_bike_screen.dart';
 import 'package:bikeapp/screens/create_account_screen.dart';
+import 'package:bikeapp/screens/end_ride_screen.dart';
 import 'package:bikeapp/screens/forgot_password.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/screens/sign_in_screen.dart';
@@ -23,7 +24,8 @@ class _AppState extends State<App> {
     MapScreen.routeName: (context) => MapScreen(),
     AccidentWaverScreen.routeName: (context) => AccidentWaverScreen(),
     AddBikeScreen.routeName: (context) => AddBikeScreen(),
-    MapView.routeName: (context) => MapView()
+    MapView.routeName: (context) => MapView(),
+    EndRideScreen.routeName: (context) => EndRideScreen(),
   };
 
   @override
@@ -62,7 +64,9 @@ class AuthenticationWrapper extends StatelessWidget {
     final user = AuthenticationService(FirebaseAuth.instance).getUser();
 
     if (firebaseUser != null && user.emailVerified) {
-      return MapScreen();
+      // CHANGE BACK WHEN DONE
+      //return MapScreen();
+      return EndRideScreen();
     }
     return SignInScreen();
   }
