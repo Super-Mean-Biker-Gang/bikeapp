@@ -201,12 +201,9 @@ class _AddBikeFormState extends State<AddBikeForm> {
       // Placeholder for when image has not been selected
       return Padding(
         padding: EdgeInsets.only(right: 0, left: 25),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.image_search, size: queryData.size.width * .80)
-          ]
-        ),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(Icons.image_search, size: queryData.size.width * .80)
+        ]),
       );
     }
   }
