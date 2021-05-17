@@ -191,7 +191,9 @@ class MapScreenState extends State<MapScreen> {
     FirebaseFirestore.instance.collection('bikes').get().then((doc) {
       if (doc.docs.isNotEmpty) {
         for (int i = 0; i < doc.docs.length; ++i) {
-          createMarker(doc.docs[i].data(), doc.docs[i].id);
+          if(doc.docs[i].data()['isBeingUsed'] == false) {
+            createMarker(doc.docs[i].data(), doc.docs[i].id);
+          }
         }
       }
     });
