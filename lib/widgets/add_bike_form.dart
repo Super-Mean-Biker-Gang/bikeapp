@@ -33,30 +33,35 @@ class _AddBikeFormState extends State<AddBikeForm> {
 
   void getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    image = File(pickedFile.path);
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage
-        .ref()
-        .child("image " + DateTime.now().toString()); // need better name
-    UploadTask uploadTask = ref.putFile(image);
-    uploadTask.then((res) async {
-      imageURL = await res.ref.getDownloadURL();
-    });
-    setState(() {});
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child("image " + DateTime.now().toString()); // need better name
+      UploadTask uploadTask = ref.putFile(image);
+      uploadTask.then((res) async {
+        imageURL = await res.ref.getDownloadURL();
+      });
+      setState(() {});
+    }
   }
 
   void takePhoto() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
-    image = File(pickedFile.path);
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage
-        .ref()
-        .child("image " + DateTime.now().toString()); // need better name
-    UploadTask uploadTask = ref.putFile(image);
-    uploadTask.then((res) async {
-      imageURL = await res.ref.getDownloadURL();
-    });
-    setState(() {});
+
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child("image " + DateTime.now().toString()); // need better name
+      UploadTask uploadTask = ref.putFile(image);
+      uploadTask.then((res) async {
+        imageURL = await res.ref.getDownloadURL();
+      });
+      setState(() {});
+    }
   }
 
   void retrieveLocation() async {
@@ -100,11 +105,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
             ],
           ),
           SizedBox(height: 40),
-          TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                hintText: "Bike Name",
-              )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: TextField(
@@ -120,13 +120,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
           Text("Lock Combination"),
           lockInput(context),
           SizedBox(height: 40),
-          ElevatedButton(
-            child: Text('Select Photo'),
-            onPressed: () {
-              getImage();
-            },
-          ),
-          SizedBox(height: 40),
           bikeTagCheckBoxes(context),
           SizedBox(height: 20),
           FractionallySizedBox(
@@ -138,6 +131,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
               },
             ),
           ),
+          SizedBox(height: 20),
         ]),
       ),
     );
@@ -199,13 +193,17 @@ class _AddBikeFormState extends State<AddBikeForm> {
   }
 
   Widget showImage(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
     if (image != null) {
       return Image.file(image);
     } else {
       // Placeholder for when image has not been selected
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 100.0),
-        child: Placeholder(fallbackHeight: 160),
+        padding: EdgeInsets.only(right: 0, left: 25),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(Icons.image_search, size: queryData.size.width * .80)
+        ]),
       );
     }
   }
@@ -214,15 +212,16 @@ class _AddBikeFormState extends State<AddBikeForm> {
     return Column(
       children: [
         CheckboxGroup(
-            labels: <String>["Road Bike", "Mountain Bike", "Hybrid"],
-            onChange: (bool isChecked, String label, int index) {
-              if (isChecked && !tags.contains(label)) {
-                tags.add(label);
-              } else if (!isChecked && tags.contains(label)) {
-                tags.remove(label);
-              }
-              setState(() {});
-            }),
+          labels: <String>["Road Bike", "Mountain Bike", "Hybrid"],
+          onChange: (bool isChecked, String label, int index) {
+            if (isChecked && !tags.contains(label)) {
+              tags.add(label);
+            } else if (!isChecked && tags.contains(label)) {
+              tags.remove(label);
+            }
+            setState(() {});
+          },
+        ),
       ],
     );
   }
