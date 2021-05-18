@@ -64,9 +64,7 @@ class AuthenticationWrapper extends StatelessWidget {
     final user = AuthenticationService(FirebaseAuth.instance).getUser();
 
     if (firebaseUser != null && user.emailVerified) {
-      // CHANGE BACK WHEN DONE
-      //return MapScreen();
-      return EndRideScreen();
+      return MapScreen();
     }
     return SignInScreen();
   }
