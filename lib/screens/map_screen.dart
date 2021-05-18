@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bikeapp/widgets/map_end_drawer.dart';
-import 'package:bikeapp/widgets/map_drawer.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_config/flutter_config.dart';
@@ -191,7 +190,7 @@ class MapScreenState extends State<MapScreen> {
     FirebaseFirestore.instance.collection('bikes').get().then((doc) {
       if (doc.docs.isNotEmpty) {
         for (int i = 0; i < doc.docs.length; ++i) {
-          if(doc.docs[i].data()['isBeingUsed'] == false) {
+          if (doc.docs[i].data()['isBeingUsed'] == false) {
             createMarker(doc.docs[i].data(), doc.docs[i].id);
           }
         }
@@ -323,7 +322,7 @@ class MapScreenState extends State<MapScreen> {
       key: scaffoldKey,
       body: mapView(context),
       endDrawer: MapEndDrawer(),
-      drawer: MapDrawer(),
+      drawer: filterDrawer(),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             determinePosition();
@@ -439,10 +438,69 @@ class MapScreenState extends State<MapScreen> {
                     ),
             ),
             Padding(
-                padding: EdgeInsets.only(top: queryData.size.height * .10),
-                child: searchBar()),
+              padding: EdgeInsets.only(top: queryData.size.height * .10),
+              child: searchBar(),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget filterDrawer() {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    return Drawer(
+      child: ListView(
+        children: [
+          Container(
+            height: queryData.size.height * .20,
+            child: DrawerHeader(
+              child: Text(
+                'Filter',
+                style: TextStyle(fontSize: queryData.textScaleFactor * 30),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.add),
+            title: Text(
+              'Tags',
+              style: TextStyle(fontSize: queryData.textScaleFactor * 20),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Wrap(
+              children: [
+                roadBikeFilterChip(),
+                SizedBox(width: 10),
+                mountainBikeFilterChip(),
+                SizedBox(width: 10),
+                hybridBikeFilterChip(),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.star),
+            title: Text('Rating',
+                style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Wrap(
+              children: [
+                allRatingChip(),
+                SizedBox(width: 10),
+                twoAndUpRatingChip(),
+                SizedBox(width: 10),
+                threeAndUpRatingChip(),
+                SizedBox(width: 10),
+                fourAndUpRatingChip(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -463,6 +521,140 @@ class MapScreenState extends State<MapScreen> {
       compassEnabled: true,
       myLocationButtonEnabled: false,
       zoomControlsEnabled: false,
+    );
+  }
+
+  /////////////////////// Filter Widgets ///////////////////////////
+
+  var _roadBikeSelected = false;
+  var _mountainBikeSelected = false;
+  var _hybridBikeSelected = false;
+  int _selectedIndex = 1;
+
+  Widget roadBikeFilterChip() {
+    return FilterChip(
+      label: Text('Road Bike'),
+      selected: _roadBikeSelected,
+      onSelected: (bool selected) {
+        setState(() {
+          _roadBikeSelected = selected;
+        });
+      },
+      elevation: 10,
+      pressElevation: 5,
+      backgroundColor: Colors.green[100],
+      selectedColor: Colors.green[400],
+      avatar: Icon(Icons.add_circle),
+    );
+  }
+
+  Widget mountainBikeFilterChip() {
+    return FilterChip(
+      label: Text('Mountain Bike'),
+      selected: _mountainBikeSelected,
+      onSelected: (bool selected) {
+        setState(() {
+          _mountainBikeSelected = selected;
+        });
+      },
+      elevation: 10,
+      pressElevation: 5,
+      backgroundColor: Colors.green[100],
+      selectedColor: Colors.green[400],
+      avatar: Icon(Icons.add_circle),
+    );
+  }
+
+  Widget hybridBikeFilterChip() {
+    return FilterChip(
+      label: Text('hybrid Bike'),
+      selected: _hybridBikeSelected,
+      onSelected: (bool selected) {
+        setState(() {
+          _hybridBikeSelected = selected;
+        });
+      },
+      elevation: 10,
+      pressElevation: 5,
+      backgroundColor: Colors.green[100],
+      selectedColor: Colors.green[400],
+      avatar: Icon(Icons.add_circle),
+    );
+  }
+
+  Widget allRatingChip() {
+    return ChoiceChip(
+      label: Text('All'),
+      selected: _selectedIndex == 1,
+      onSelected: (bool selected) {
+        setState(() {
+          if (selected) {
+            _selectedIndex = 1;
+          }
+        });
+      },
+      elevation: 10,
+      pressElevation: 5,
+      backgroundColor: Colors.yellow[100],
+      selectedColor: Colors.yellow[500],
+      avatar: Icon(Icons.stars),
+    );
+  }
+
+  Widget twoAndUpRatingChip() {
+    return ChoiceChip(
+      label: Text('2 Or More'),
+      selected: _selectedIndex == 2,
+      onSelected: (bool selected) {
+        setState(() {
+          if (selected) {
+            _selectedIndex = 2;
+          }
+        });
+      },
+      elevation: 10,
+      pressElevation: 5,
+      backgroundColor: Colors.yellow[100],
+      selectedColor: Colors.yellow[500],
+      avatar: Icon(Icons.stars),
+    );
+  }
+
+  Widget threeAndUpRatingChip() {
+    return ChoiceChip(
+      label: Text('3 Or More'),
+      selected: _selectedIndex == 3,
+      onSelected: (bool selected) {
+        setState(() {
+          if (selected) {
+            _selectedIndex = 3;
+          }
+        });
+      },
+      elevation: 10,
+      pressElevation: 5,
+      backgroundColor: Colors.yellow[100],
+      selectedColor: Colors.yellow[500],
+      avatar: Icon(Icons.stars),
+    );
+  }
+
+  Widget fourAndUpRatingChip() {
+    return ChoiceChip(
+      label: Text('4 Or More'),
+      selected: _selectedIndex == 4,
+      onSelected: (bool selected) {
+        setState(() {
+          if (selected) {
+            _selectedIndex = 4;
+          }
+        });
+      },
+      elevation: 10,
+      pressElevation: 5,
+      backgroundColor: Colors.yellow[100],
+      selectedColor: Colors.yellow[500],
+      avatar: Icon(Icons.stars),
     );
   }
 }
