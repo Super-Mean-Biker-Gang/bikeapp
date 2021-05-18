@@ -1,5 +1,6 @@
 import 'package:bikeapp/models/bike.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:location/location.dart';
 
 class DatabaseService {
   Future<List<Bike>> getBikes() async {
@@ -42,7 +43,7 @@ class DatabaseService {
     return snapshot.first.id;
   }
 
-  void endRide(double newRating, Bike currentBike) async {
+  void endRide(double newRating, Bike currentBike, LocationData locationData) async {
     String id = await getBikeId(currentBike); // firebase id of bike
     // Copy list, push new rating onto before updating
     List<dynamic> ratings = currentBike.rating;
@@ -58,6 +59,8 @@ class DatabaseService {
       "rating": ratings,
       "riderEmail": null,
       "averageRating": averageRating,
+      "latitude": locationData.latitude,
+      "longitude": locationData.longitude,
     });
   }
 }

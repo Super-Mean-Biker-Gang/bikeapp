@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:location/location.dart';
 
 class EndRideForm extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class EndRideForm extends StatefulWidget {
 
 class _EndRideFormState extends State<EndRideForm> {
   DatabaseService databaseService = DatabaseService();
+  LocationData locationData;
   final FirebaseAuth auth = FirebaseAuth.instance;
   User user;
   TextEditingController ratingController = new TextEditingController();
@@ -24,6 +26,14 @@ class _EndRideFormState extends State<EndRideForm> {
     super.initState();
     user = auth.currentUser;
     getBike();
+    retrieveLocation();
+  }
+
+
+  void retrieveLocation() async {
+    var locationService = Location();
+    locationData = await locationService.getLocation();
+    setState(() {});
   }
 
   @override
@@ -73,7 +83,7 @@ class _EndRideFormState extends State<EndRideForm> {
   }
 
   void endRide(double newRating) async {
-    databaseService.endRide(newRating, currentBike);
+    databaseService.endRide(newRating, currentBike, locationData);
     // go back to maps screen
     Navigator.of(context).pushNamed(MapScreen.routeName);
     // may want to eventually base redirect on global state of if user is using bike
