@@ -1,11 +1,12 @@
 import 'package:bikeapp/models/bike.dart';
+import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class EndRideForm extends StatefulWidget {
-
   @override
   _EndRideFormState createState() => _EndRideFormState();
 }
@@ -16,6 +17,7 @@ class _EndRideFormState extends State<EndRideForm> {
   User user;
   TextEditingController ratingController = new TextEditingController();
   Bike currentBike;
+  double newRating;
 
   @override
   void initState() {
@@ -26,31 +28,54 @@ class _EndRideFormState extends State<EndRideForm> {
 
   @override
   Widget build(BuildContext context) {
-    getBike();    
-    if(currentBike == null) {
-      //return CircularProgressIndicator();
-      return Column(
-        children: [
-          Text(user.email),
-          ElevatedButton(onPressed: () {getBike();}, child: Text("Refresh Bike"))
-          //Text(currentBike.bikeName),       
-        ],
-      );
+    if (currentBike == null) {
+      return CircularProgressIndicator();
     } else {
-      return Column(
-        children: [
-          Text("In end ride form"), 
-          Text(user.email),
-          Text(currentBike.bikeName),       
-        ],
+      return Center(
+        child: Column(
+          children: [
+            Image.network(currentBike.photoUrl),
+            Text(currentBike.bikeName),
+            SizedBox(height: 30),
+            Text("Rate your ride"),
+            SizedBox(height: 30),
+            RatingBar.builder(
+                initialRating: 3,
+                minRating: 0.5,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.purple,
+                    ),
+                onRatingUpdate: (rating) {
+                  newRating = rating;
+                }),
+            SizedBox(height: 30),
+            ElevatedButton(
+                child: Text("End Ride"),
+                onPressed: () {
+                  endRide(newRating);
+                }),
+          ],
+        ),
       );
     }
   }
 
-  Future<void> getBike() async {
-    if(user != null) {
-      currentBike = await databaseService.getUsersBike(user.email);  // Getting stuck here
+  void getBike() async {
+    if (user != null) {
+      currentBike = await databaseService.getUsersBike(user.email);
     }
     setState(() {});
+  }
+
+  void endRide(double newRating) async {
+    databaseService.endRide(newRating, currentBike);
+    // go back to maps screen
+    Navigator.of(context).pushNamed(MapScreen.routeName);
+    // may want to eventually base redirect on global state of if user is using bike
   }
 }

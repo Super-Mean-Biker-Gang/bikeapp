@@ -249,6 +249,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
                       locationData != null ? locationData.longitude : 30,
                   'tags': tags,
                   'rating': null,
+                  'averageRating': null,
                   'photoUrl': imageURL,
                   'isBeingUsed': false,
                   'lockCombo': lockControllerOne.text != ""
