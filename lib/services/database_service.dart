@@ -43,7 +43,8 @@ class DatabaseService {
     return snapshot.first.id;
   }
 
-  void endRide(double newRating, Bike currentBike, LocationData locationData) async {
+  void endRide(
+      double newRating, Bike currentBike, LocationData locationData) async {
     String id = await getBikeId(currentBike); // firebase id of bike
     // Copy list, push new rating onto before updating
     List<dynamic> ratings = currentBike.rating;

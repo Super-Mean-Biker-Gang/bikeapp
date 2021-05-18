@@ -29,7 +29,6 @@ class _EndRideFormState extends State<EndRideForm> {
     retrieveLocation();
   }
 
-
   void retrieveLocation() async {
     var locationService = Location();
     locationData = await locationService.getLocation();
