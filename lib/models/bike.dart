@@ -32,11 +32,7 @@ class Bike {
     this.tags = map['tags'];
     //this.tags = ['a', 'b', 'c']; // DELETE LATER
     this.rating = map['rating'];
-    // Below should be improved later
-    int x = map['averageRating'];
-    if (x != null) {
-      this.averageRating = x.toDouble();
-    }
+    this.averageRating = map['averageRating'];
     this.photoUrl = map['photoUrl'];
     this.isBeingUsed = map['isBeingUsed'];
     this.checkoutTime = map['checkoutTime'];
