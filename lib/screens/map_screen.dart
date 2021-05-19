@@ -50,6 +50,7 @@ class MapScreenState extends State<MapScreen> {
 
   static CameraPosition _userPosition;
   static CameraPosition _searchedPosition;
+  Location.LocationData _locationData;
 
   @override
   void initState() {
@@ -136,7 +137,6 @@ class MapScreenState extends State<MapScreen> {
 
     bool _serviceEnabled;
     Location.PermissionStatus _permissionGranted;
-    Location.LocationData _locationData;
 
     // Check if service is enabled
     _serviceEnabled = await location.serviceEnabled();
@@ -187,15 +187,89 @@ class MapScreenState extends State<MapScreen> {
 
   // Get each item from the database and add it to the markers list
   void fetchDataFromDB() async {
+    setState(() {
+      mapMarkers = {};
+    });
     FirebaseFirestore.instance.collection('bikes').get().then((doc) {
       if (doc.docs.isNotEmpty) {
         for (int i = 0; i < doc.docs.length; ++i) {
           if (doc.docs[i].data()['isBeingUsed'] == false) {
-            createMarker(doc.docs[i].data(), doc.docs[i].id);
+            filterData(doc.docs[i].data(), doc.docs[i].id);
+          }
+        }
+        setState(() {
+          if (_locationData != null) {
+            print('Map markers: ${mapMarkers.length}');
+            _mapBody = googleMap();
+          }
+        });
+      }
+    });
+  }
+
+  void filterData(item, id) {
+    List tags = item['tags'];
+    filterByTag(tags, item, id);
+  }
+
+  void filterByTag(tags, item, id) {
+    if (!_roadBikeSelected &&
+        !_mountainBikeSelected &&
+        !_hybridBikeSelected &&
+        _selectedIndex == 1) {
+      filterByRating(item, id);
+    }
+    if (_roadBikeSelected) {
+      if (tags.isNotEmpty) {
+        for (var i = 0; i < tags.length; i++) {
+          if (tags[i] == 'Road Bike') {
+            filterByRating(item, id);
           }
         }
       }
-    });
+    }
+    if (_mountainBikeSelected) {
+      if (tags.isNotEmpty) {
+        for (var i = 0; i < tags.length; i++) {
+          if (tags[i] == 'Mountain Bike') {
+            filterByRating(item, id);
+          }
+        }
+      }
+    }
+    if (_hybridBikeSelected) {
+      if (tags.isNotEmpty) {
+        for (var i = 0; i < tags.length; i++) {
+          if (tags[i] == 'Hybrid Bike') {
+            filterByRating(item, id);
+          }
+        }
+      }
+    }
+    if (!_roadBikeSelected &&
+        !_mountainBikeSelected &&
+        !_hybridBikeSelected &&
+        _selectedIndex != 1) {
+      filterByRating(item, id);
+    }
+  }
+
+  void filterByRating(item, id) {
+    if (_selectedIndex == 1) {
+      createMarker(item, id);
+    } else if (_selectedIndex == 2) {
+      if (item['averageRating'] != null && item['averageRating'] >= 2) {
+        createMarker(item, id);
+      }
+    } else if (_selectedIndex == 3) {
+      if (item['averageRating'] != null && item['averageRating'] >= 3) {
+        createMarker(item, id);
+      }
+    } else if (_selectedIndex == 4) {
+      if (item['averageRating'] != null && item['averageRating'] >= 4) {
+        createMarker(item, id);
+      }
+    }
   }
 
   // Create a marker for each item and add it to the list
@@ -206,12 +280,10 @@ class MapScreenState extends State<MapScreen> {
       markerId: markerId,
       position: LatLng(field['latitude'], field['longitude']),
       icon: bikeIcon,
-      infoWindow:
-          InfoWindow(title: field['bikeName'], snippet: field['rating']),
+      infoWindow: InfoWindow(title: field['bikeName']),
     );
     setState(() {
       mapMarkers[markerId] = marker;
-      print(markerId);
     });
   }
 
@@ -538,6 +610,7 @@ class MapScreenState extends State<MapScreen> {
       onSelected: (bool selected) {
         setState(() {
           _roadBikeSelected = selected;
+          fetchDataFromDB();
         });
       },
       elevation: 10,
@@ -555,6 +628,7 @@ class MapScreenState extends State<MapScreen> {
       onSelected: (bool selected) {
         setState(() {
           _mountainBikeSelected = selected;
+          fetchDataFromDB();
         });
       },
       elevation: 10,
@@ -572,6 +646,7 @@ class MapScreenState extends State<MapScreen> {
       onSelected: (bool selected) {
         setState(() {
           _hybridBikeSelected = selected;
+          fetchDataFromDB();
         });
       },
       elevation: 10,
@@ -590,6 +665,7 @@ class MapScreenState extends State<MapScreen> {
         setState(() {
           if (selected) {
             _selectedIndex = 1;
+            fetchDataFromDB();
           }
         });
       },
@@ -609,6 +685,7 @@ class MapScreenState extends State<MapScreen> {
         setState(() {
           if (selected) {
             _selectedIndex = 2;
+            fetchDataFromDB();
           }
         });
       },
@@ -628,6 +705,7 @@ class MapScreenState extends State<MapScreen> {
         setState(() {
           if (selected) {
             _selectedIndex = 3;
+            fetchDataFromDB();
           }
         });
       },
@@ -647,6 +725,7 @@ class MapScreenState extends State<MapScreen> {
         setState(() {
           if (selected) {
             _selectedIndex = 4;
+            fetchDataFromDB();
           }
         });
       },
