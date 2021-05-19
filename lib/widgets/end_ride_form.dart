@@ -40,35 +40,37 @@ class _EndRideFormState extends State<EndRideForm> {
     if (currentBike == null) {
       return CircularProgressIndicator();
     } else {
-      return Center(
-        child: Column(
-          children: [
-            Image.network(currentBike.photoUrl),
-            Text(currentBike.bikeName),
-            SizedBox(height: 30),
-            Text("Rate your ride"),
-            SizedBox(height: 30),
-            RatingBar.builder(
-                initialRating: 3,
-                minRating: 0.5,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.purple,
-                    ),
-                onRatingUpdate: (rating) {
-                  newRating = rating;
-                }),
-            SizedBox(height: 30),
-            ElevatedButton(
-                child: Text("End Ride"),
-                onPressed: () {
-                  endRide(newRating);
-                }),
-          ],
+      return SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              displayImage(),
+              Text(currentBike.bikeName),
+              SizedBox(height: 30),
+              Text("Rate your ride"),
+              SizedBox(height: 30),
+              RatingBar.builder(
+                  initialRating: 3,
+                  minRating: 0.5,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.purple,
+                      ),
+                  onRatingUpdate: (rating) {
+                    newRating = rating;
+                  }),
+              SizedBox(height: 30),
+              ElevatedButton(
+                  child: Text("End Ride"),
+                  onPressed: () {
+                    endRide(newRating);
+                  }),
+            ],
+          ),
         ),
       );
     }
@@ -86,5 +88,13 @@ class _EndRideFormState extends State<EndRideForm> {
     // go back to maps screen
     Navigator.of(context).pushNamed(MapScreen.routeName);
     // may want to eventually base redirect on global state of if user is using bike
+  }
+
+  Widget displayImage() {
+    if (currentBike.photoUrl != null) {
+      return Image.network(currentBike.photoUrl);
+    } else {
+      return CircularProgressIndicator();
+    }
   }
 }
