@@ -68,10 +68,11 @@ class _EndRideFormState extends State<EndRideForm> {
                   }),
               SizedBox(height: 30),
               ElevatedButton(
-                  child: Text("End Ride"),
-                  onPressed: () {
-                    endRide(newRating);
-                  }),
+                child: Text("End Ride"),
+                onPressed: () {
+                  endRide(newRating);
+                },
+              ),
             ],
           ),
         ),
