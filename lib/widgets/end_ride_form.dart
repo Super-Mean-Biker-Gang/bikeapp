@@ -27,6 +27,7 @@ class _EndRideFormState extends State<EndRideForm> {
     user = auth.currentUser;
     getBike();
     retrieveLocation();
+    newRating = 3.0;
   }
 
   void retrieveLocation() async {
@@ -61,7 +62,9 @@ class _EndRideFormState extends State<EndRideForm> {
                         color: Colors.purple,
                       ),
                   onRatingUpdate: (rating) {
-                    newRating = rating;
+                    if (rating != null) {
+                      newRating = rating;
+                    }
                   }),
               SizedBox(height: 30),
               ElevatedButton(
