@@ -261,6 +261,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
                       : "No Combo Entered",
                   'donatedUserEmail':
                       user != null ? user.email : "default@email.com",
+                   'riderEmail': null,                 
                 });
                 Navigator.pushNamed(context, MapScreen.routeName);
               },

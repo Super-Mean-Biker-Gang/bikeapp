@@ -40,6 +40,9 @@ class DatabaseService {
                   (element) => element['riderEmail'] == bike.riderEmail,
                   orElse: null)
             });
+    if (snapshot == null) {
+      return null;
+    }
     return snapshot.first.id;
   }
 
@@ -48,6 +51,11 @@ class DatabaseService {
     String id = await getBikeId(currentBike); // firebase id of bike
     // Copy list, push new rating onto before updating
     List<dynamic> ratings = currentBike.rating;
+
+    if (ratings == null) {
+      ratings = [];
+    }
+
     ratings.add(newRating);
     double total = 0;
     for (int i = 0; i < ratings.length; i++) {
@@ -55,13 +63,15 @@ class DatabaseService {
     }
     double averageRating = total / ratings.length.toDouble();
 
-    FirebaseFirestore.instance.collection('bikes').doc(id).update({
-      "isBeingUsed": false,
-      "rating": ratings,
-      "riderEmail": null,
-      "averageRating": averageRating,
-      "latitude": locationData.latitude,
-      "longitude": locationData.longitude,
-    });
+    if (id != null) {
+      FirebaseFirestore.instance.collection('bikes').doc(id).update({
+        "isBeingUsed": false,
+        "rating": ratings,
+        "riderEmail": null,
+        "averageRating": averageRating,
+        "latitude": locationData.latitude,
+        "longitude": locationData.longitude,
+      });
+    }
   }
 }
