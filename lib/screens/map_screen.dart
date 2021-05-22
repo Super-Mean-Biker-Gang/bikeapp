@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bikeapp/widgets/check_out_form.dart';
 import 'package:bikeapp/widgets/map_end_drawer.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:bikeapp/models/bike.dart';
 
 final apiKey = FlutterConfig.get('API_KEY');
 
@@ -277,11 +279,13 @@ class MapScreenState extends State<MapScreen> {
     var value = docID;
     final MarkerId markerId = MarkerId(value);
     final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(field['latitude'], field['longitude']),
-      icon: bikeIcon,
-      infoWindow: InfoWindow(title: field['bikeName']),
-    );
+        markerId: markerId,
+        position: LatLng(field['latitude'], field['longitude']),
+        icon: bikeIcon,
+        infoWindow: InfoWindow(title: field['bikeName']),
+        onTap: () {
+          viewPopup(context, Bike.fromMap(field));
+        });
     setState(() {
       mapMarkers[markerId] = marker;
     });
@@ -291,6 +295,66 @@ class MapScreenState extends State<MapScreen> {
   void customBikeIcon() async {
     bikeIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(devicePixelRatio: 3.5), 'assets/purple_bike.png');
+  }
+
+  void viewPopup(BuildContext context, Bike checkoutBike) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(
+              'Check Out',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: MediaQuery.of(context).textScaleFactor * 30.0,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.lightBlue[100],
+            actions: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 150.0,
+                      height: 45.0,
+                      child: ElevatedButton(
+                        child: Text(
+                          'View',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize:
+                                  MediaQuery.of(context).textScaleFactor * 20.0,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              CheckoutForm.routeName,
+                              arguments: checkoutBike);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.purple[600]),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              side: BorderSide(
+                                color: Colors.cyanAccent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   // Open the bottom sheet and fill it with autocomplete suggestions

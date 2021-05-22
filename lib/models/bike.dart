@@ -40,4 +40,19 @@ class Bike {
     this.lockCombo = map['lockCombo'];
     this.donatedUserEmail = map['donatedUserEmail'];
   }
+
+  //Map<String, dynamic> toJson() => {
+  //  'bikeName': bikeName,
+  //  'latidude': latitude,
+  //  'longitude': longitude,
+  //  'tags': tags,
+  //  'rating': rating,
+  //  'averageRating': averageRating,
+  //  'photoUrl': photoUrl,
+  //  'isBeingUsed': isBeingUsed,
+  //  'checkoutTime': checkoutTime,
+  //  'riderEmail': riderEmail,
+  //  'lockCombo': lockCombo ,
+  //  'donatedUserEmail': donatedUserEmail,
+  //};
 }
