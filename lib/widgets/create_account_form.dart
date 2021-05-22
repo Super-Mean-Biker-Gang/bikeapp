@@ -4,6 +4,10 @@ import 'package:bikeapp/screens/create_account_screen.dart';
 import 'package:bikeapp/screens/sign_in_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:provider/provider.dart';
+import 'package:bikeapp/models/responsive_size.dart';
+import 'package:bikeapp/styles/cool_button.dart';
+import 'package:bikeapp/styles/custom_input_decoration.dart';
+import 'package:email_validator/email_validator.dart';
 
 const WAVER_PATH = 'assets/text_files/registerWaver.txt';
 
@@ -16,13 +20,13 @@ class CreateAccountForm extends StatefulWidget {
 
 class _CreateAccountFormState extends State<CreateAccountForm> {
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
-
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  String email;
+  String password;
+  String confirmPassword;
 
   @override
   void initState() {
@@ -57,34 +61,20 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
         child: Form(
           key: _registerFormKey,
           child: Column(children: <Widget>[
-            TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                labelText: "Email",
-              ),
-              keyboardType: TextInputType.emailAddress,
-              validator: emailValidator,
-            ),
-            TextFormField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Password",
-              ),
-              validator: passwordValidator,
-            ),
-            TextFormField(
-              controller: confirmPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Confirm Password",
-              ),
-              validator: passwordValidator,
-            ),
+            emailTextField(),
+            SizedBox(height: responsiveHeight(10.0)),
+            passwordTextField(),
+            SizedBox(height: responsiveHeight(10.0)),
+            confirmPasswordTextField(),
+            SizedBox(height: responsiveHeight(20.0)),
             submitButton(context),
-            Text("Already have an account?"),
+            SizedBox(height: responsiveHeight(40.0)),
+            Text(
+              "Already have an account?", 
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.white)),
             TextButton(
-              child: Text("Login here!"),
+              child: Text("Login here!", style: TextStyle(color: Colors.pink)),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -95,10 +85,70 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     );
   }
 
+    Widget emailTextField() {
+    return TextFormField(
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      style: TextStyle(color: Colors.white),
+      decoration: customInputDecoration(
+          hint: 'Enter your email', icon: Icon(Icons.mail)),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter your email';
+        } else if (!EmailValidator.validate(value) && value.isNotEmpty) {
+          return 'Please enter a valid email address';
+        }
+        return null;
+      },
+      onSaved: (value) => email = value.trim(),
+    );
+  }
+
+  Widget passwordTextField() {
+    return TextFormField(
+      controller: passwordController,
+      obscureText: true,
+      style: TextStyle(color: Colors.white),
+      decoration: customInputDecoration(
+          hint: 'Enter your password', icon: Icon(Icons.lock)),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter your password';
+        } else if (value.length < 8 && value.isNotEmpty) {
+          return 'Password must be at least 8 characters';
+        }
+        return null;
+      },
+      onSaved: (value) => password = value.trim(),
+    );
+  }
+
+    Widget confirmPasswordTextField() {
+    return TextFormField(
+      controller: confirmPasswordController,
+      obscureText: true,
+      style: TextStyle(color: Colors.white),
+      decoration: customInputDecoration(
+          hint: 'Enter your password', icon: Icon(Icons.lock)),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter your password';
+        } else if (value.length < 8 && value.isNotEmpty) {
+          return 'Password must be at least 8 characters';
+        } else if (value != password) {
+          return 'Passwors must match';
+        }
+        return null;
+      },
+      onSaved: (value) => confirmPassword = value.trim(),
+    );
+  }
+
   Widget submitButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
+    return CoolButton(
+        title: 'Register',
+        textColor: Colors.white,
+        filledColor: Colors.pink,     
         onPressed: () {
           if (_registerFormKey.currentState.validate()) {
             if (passwordController.text == confirmPasswordController.text) {
@@ -149,9 +199,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             }
           }
         },
-        child: Text("Create Account"),
-      ),
-    );
+      );
+    
   }
 
   void registerAndSignIn(BuildContext context) {
@@ -173,7 +222,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   onPressed: () {
                     Navigator.popUntil(context,
                         ModalRoute.withName(CreateAccountScreen.routeName));
-                  }),
+                  },
+                ),
             ],
           );
         },
