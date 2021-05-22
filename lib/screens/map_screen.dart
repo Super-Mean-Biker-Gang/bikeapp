@@ -641,7 +641,7 @@ class MapScreenState extends State<MapScreen> {
 
   Widget hybridBikeFilterChip() {
     return FilterChip(
-      label: Text('hybrid Bike'),
+      label: Text('Hybrid Bike'),
       selected: _hybridBikeSelected,
       onSelected: (bool selected) {
         setState(() {
