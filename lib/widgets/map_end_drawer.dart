@@ -26,16 +26,9 @@ class MapEndDrawer extends StatelessWidget {
             height: queryData.size.height * .20,
             child: DrawerHeader(
               child: Text('Quick Access',
-                  style: TextStyle(fontSize: queryData.textScaleFactor * 30)),
+                style: TextStyle(fontSize: queryData.textScaleFactor * 30),
+              ),
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Account',
-                style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
-            onTap: () {
-              print('Moving to Account Page');
-            },
           ),
           ListTile(
             leading: Icon(Icons.add),
