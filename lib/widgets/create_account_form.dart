@@ -34,25 +34,6 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     loadText();
   }
 
-  String emailValidator(String value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value)) {
-      return 'Email format is invalid';
-    } else {
-      return null;
-    }
-  }
-
-  String passwordValidator(String value) {
-    if (value.length < 8) {
-      return 'Password must be longer than 8 characters';
-    } else {
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -135,7 +116,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           return 'Please enter your password';
         } else if (value.length < 8 && value.isNotEmpty) {
           return 'Password must be at least 8 characters';
-        } else if (value != password) {
+        } else if (value != passwordController.text.toString()) {
           return 'Passwors must match';
         }
         return null;
