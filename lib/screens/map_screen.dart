@@ -572,6 +572,14 @@ class MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
+          SizedBox(height: 25),
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Text('Swipe left to dismiss',
+              style: TextStyle(fontSize: queryData.textScaleFactor * 15),
+            ),
+          ),
+          SizedBox(height: 20),
         ],
       ),
     );
