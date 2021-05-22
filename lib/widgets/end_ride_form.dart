@@ -88,7 +88,7 @@ class _EndRideFormState extends State<EndRideForm> {
   }
 
   void endRide(double newRating) async {
-    databaseService.endRide(newRating, currentBike, locationData);
+    databaseService.endRide(newRating, currentBike);
     // go back to maps screen
     Navigator.of(context).pushNamed(MapScreen.routeName);
     // may want to eventually base redirect on global state of if user is using bike
