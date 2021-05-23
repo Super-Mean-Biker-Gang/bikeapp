@@ -243,21 +243,21 @@ class _AddBikeFormState extends State<AddBikeForm> {
                 TextSpan(text: 'By continuing, you agree to our '),
                 TextSpan(
                   text: 'Terms of Service',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline),
+                  style: TextStyle(decoration: TextDecoration.underline),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Navigator.pushNamed(context, TermsOfServiceScreen.routeName);
+                      Navigator.pushNamed(
+                          context, TermsOfServiceScreen.routeName);
                     },
                 ),
                 TextSpan(text: ' and '),
                 TextSpan(
                   text: 'Privacy Policy',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline),
+                  style: TextStyle(decoration: TextDecoration.underline),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Navigator.pushNamed(context, PrivacyPolicyScreen.routeName);
+                      Navigator.pushNamed(
+                          context, PrivacyPolicyScreen.routeName);
                     },
                 ),
               ],

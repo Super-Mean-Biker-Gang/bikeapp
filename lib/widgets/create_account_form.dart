@@ -119,21 +119,22 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                           TextSpan(
                               text: 'Terms of Service',
                               style: TextStyle(
-                                decoration: TextDecoration.underline),
+                                  decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushNamed(context, TermsOfServiceScreen.routeName);
+                                  Navigator.pushNamed(
+                                      context, TermsOfServiceScreen.routeName);
                                 }),
                           TextSpan(text: ' and '),
                           TextSpan(
-                            text: 'Privacy Policy',
-                            style: TextStyle(
-                              decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(context, PrivacyPolicyScreen.routeName);
-                              }
-                          ),
+                              text: 'Privacy Policy',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(
+                                      context, PrivacyPolicyScreen.routeName);
+                                }),
                         ],
                       ),
                     ),
