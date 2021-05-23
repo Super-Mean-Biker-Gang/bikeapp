@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bikeapp/screens/add_bike_screen.dart';
+import 'package:bikeapp/screens/privacy_policy_screen.dart';
+import 'package:bikeapp/screens/terms_of_service_screen.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/gestures.dart';
 
 const WAVER_PATH = 'assets/text_files/donateBikeWaver.txt';
 
@@ -231,9 +234,35 @@ class _AddBikeFormState extends State<AddBikeForm> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Waiver"),
-          // Eventually read this from a text doc
-          content: Text(_waverMessage),
+          title: Text("Release of Interest", textAlign: TextAlign.center),
+          content: Text.rich(
+            TextSpan(
+              text: _waverMessage,
+              children: [
+                TextSpan(text: '\n                    \n'),
+                TextSpan(text: 'By continuing, you agree to our '),
+                TextSpan(
+                  text: 'Terms of Service',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pushNamed(context, TermsOfServiceScreen.routeName);
+                    },
+                ),
+                TextSpan(text: ' and '),
+                TextSpan(
+                  text: 'Privacy Policy',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pushNamed(context, PrivacyPolicyScreen.routeName);
+                    },
+                ),
+              ],
+            ),
+          ),
           actions: <Widget>[
             TextButton(
               child: Text("I accept"),
