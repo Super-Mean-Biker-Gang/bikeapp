@@ -5,6 +5,8 @@ import 'package:bikeapp/screens/end_ride_screen.dart';
 import 'package:bikeapp/screens/forgot_password.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/screens/sign_in_screen.dart';
+import 'package:bikeapp/screens/privacy_policy_screen.dart';
+import 'package:bikeapp/screens/terms_of_service_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,8 @@ class _AppState extends State<App> {
     AddBikeScreen.routeName: (context) => AddBikeScreen(),
     MapView.routeName: (context) => MapView(),
     EndRideScreen.routeName: (context) => EndRideScreen(),
+    PrivacyPolicyScreen.routeName: (context) => PrivacyPolicyScreen(),
+    TermsOfServiceScreen.routeName: (context) => TermsOfServiceScreen()
   };
 
   @override
@@ -64,7 +68,7 @@ class AuthenticationWrapper extends StatelessWidget {
     final user = AuthenticationService(FirebaseAuth.instance).getUser();
 
     if (firebaseUser != null && user.emailVerified) {
-      return MapScreen();
+      return CreateAccountScreen();
     }
     return SignInScreen();
   }
