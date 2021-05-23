@@ -15,7 +15,6 @@ import 'package:bikeapp/styles/custom_input_decoration.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 import 'package:flutter/gestures.dart';
 
-
 const WAVER_PATH = 'assets/text_files/donateBikeWaver.txt';
 
 class AddBikeForm extends StatefulWidget {

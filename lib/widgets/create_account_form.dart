@@ -12,7 +12,6 @@ import 'package:bikeapp/styles/custom_input_decoration.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 
-
 const WAVER_PATH = 'assets/text_files/registerWaver.txt';
 
 String _waverMessage;
@@ -149,8 +148,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                         TextSpan(text: 'By continuing, you agree to our '),
                         TextSpan(
                             text: 'Terms of Service',
-                            style: TextStyle(
-                                decoration: TextDecoration.underline),
+                            style:
+                                TextStyle(decoration: TextDecoration.underline),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.pushNamed(
@@ -159,8 +158,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                         TextSpan(text: ' and '),
                         TextSpan(
                             text: 'Privacy Policy',
-                            style: TextStyle(
-                                decoration: TextDecoration.underline),
+                            style:
+                                TextStyle(decoration: TextDecoration.underline),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.pushNamed(
@@ -172,32 +171,6 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   actions: <Widget>[
                     TextButton(
                         child: Text("I accept"),
-                        onPressed: () {
-                          registerAndSignIn(context);
-                        }),
-                    TextButton(
-                      child: Text("Close"),
-                      onPressed: () {
-                        Navigator.popUntil(
-                            context,
-                            ModalRoute.withName(
-                                CreateAccountScreen.routeName));
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Error"),
-                  content: Text("The passwords do not match"),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text("Close"),
                         onPressed: () {
                           registerAndSignIn(context);
                         }),
@@ -221,9 +194,15 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   content: Text("The passwords do not match"),
                   actions: <Widget>[
                     TextButton(
+                        child: Text("Close"),
+                        onPressed: () {
+                          registerAndSignIn(context);
+                        }),
+                    TextButton(
                       child: Text("Close"),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.popUntil(context,
+                            ModalRoute.withName(CreateAccountScreen.routeName));
                       },
                     ),
                   ],
@@ -231,6 +210,24 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
               },
             );
           }
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Error"),
+                content: Text("The passwords do not match"),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text("Close"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         }
       },
     );
