@@ -401,7 +401,7 @@ class MapScreenState extends State<MapScreen> {
           },
           tooltip: 'Center map on Location',
           child: Icon(Icons.my_location),
-          backgroundColor: Colors.blue),
+          backgroundColor: Colors.cyan[500]),
     );
   }
 
@@ -471,7 +471,7 @@ class MapScreenState extends State<MapScreen> {
                       },
                       tooltip: 'Account Access',
                       icon: Icon(Icons.account_circle_outlined,
-                          color: Colors.blue,
+                          color: Colors.cyan[500],
                           size: queryData.textScaleFactor * 40),
                     ),
                   ],
