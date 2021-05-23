@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bikeapp/screens/create_account_screen.dart';
+import 'package:bikeapp/screens/privacy_policy_screen.dart';
+import 'package:bikeapp/screens/terms_of_service_screen.dart';
 import 'package:bikeapp/screens/sign_in_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +10,8 @@ import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/styles/cool_button.dart';
 import 'package:bikeapp/styles/custom_input_decoration.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/gestures.dart';
+
 
 const WAVER_PATH = 'assets/text_files/registerWaver.txt';
 
@@ -136,12 +140,64 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text("Waiver"),
-                  // Eventually read this from a text doc
-                  content: Text(_waverMessage),
+                  title: Text("Waiver", textAlign: TextAlign.center),
+                  content: Text.rich(
+                    TextSpan(
+                      text: _waverMessage,
+                      children: [
+                        TextSpan(text: '\n                    \n'),
+                        TextSpan(text: 'By continuing, you agree to our '),
+                        TextSpan(
+                            text: 'Terms of Service',
+                            style: TextStyle(
+                                decoration: TextDecoration.underline),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(
+                                    context, TermsOfServiceScreen.routeName);
+                              }),
+                        TextSpan(text: ' and '),
+                        TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(
+                                decoration: TextDecoration.underline),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(
+                                    context, PrivacyPolicyScreen.routeName);
+                              }),
+                      ],
+                    ),
+                  ),
                   actions: <Widget>[
                     TextButton(
                         child: Text("I accept"),
+                        onPressed: () {
+                          registerAndSignIn(context);
+                        }),
+                    TextButton(
+                      child: Text("Close"),
+                      onPressed: () {
+                        Navigator.popUntil(
+                            context,
+                            ModalRoute.withName(
+                                CreateAccountScreen.routeName));
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Error"),
+                  content: Text("The passwords do not match"),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text("Close"),
                         onPressed: () {
                           registerAndSignIn(context);
                         }),

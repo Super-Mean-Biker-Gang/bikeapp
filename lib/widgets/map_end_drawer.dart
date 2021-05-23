@@ -3,6 +3,9 @@ import 'package:bikeapp/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bikeapp/screens/privacy_policy_screen.dart';
+import 'package:bikeapp/screens/terms_of_service_screen.dart';
+import 'package:flutter/gestures.dart';
 
 class MapEndDrawer extends StatelessWidget {
   // connect routing function with account screen
@@ -25,17 +28,11 @@ class MapEndDrawer extends StatelessWidget {
           Container(
             height: queryData.size.height * .20,
             child: DrawerHeader(
-              child: Text('Quick Access',
-                  style: TextStyle(fontSize: queryData.textScaleFactor * 30)),
+              child: Text(
+                'Quick Access',
+                style: TextStyle(fontSize: queryData.textScaleFactor * 30),
+              ),
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Account',
-                style: TextStyle(fontSize: queryData.textScaleFactor * 20)),
-            onTap: () {
-              print('Moving to Account Page');
-            },
           ),
           ListTile(
             leading: Icon(Icons.add),
@@ -54,6 +51,40 @@ class MapEndDrawer extends StatelessWidget {
               Navigator.popUntil(context, ModalRoute.withName("/"));
             },
           ),
+          SizedBox(height: queryData.size.height * .50),
+          ListTile(
+              leading: Icon(Icons.copyright),
+              title: Text('The Bike Kollective 2021')),
+          Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text.rich(
+              TextSpan(
+                text: 'View ',
+                children: [
+                  TextSpan(
+                    text: 'Terms of Service',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.pushNamed(
+                            context, TermsOfServiceScreen.routeName);
+                      },
+                  ),
+                  TextSpan(text: ' and '),
+                  TextSpan(
+                    text: 'Privacy Policy',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.pushNamed(
+                            context, PrivacyPolicyScreen.routeName);
+                      },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 20)
         ],
       ),
     );
