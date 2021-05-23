@@ -339,8 +339,35 @@ class _AddBikeFormState extends State<AddBikeForm> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Waiver"),
-            content: Text(_waverMessage),
+            title: Text("Release of Interest", textAlign: TextAlign.center),
+            content: Text.rich(
+              TextSpan(
+                text: _waverMessage,
+                children: [
+                  TextSpan(text: '\n                    \n'),
+                  TextSpan(text: 'By continuing, you agree to our '),
+                  TextSpan(
+                    text: 'Terms of Service',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.pushNamed(
+                            context, TermsOfServiceScreen.routeName);
+                      },
+                  ),
+                  TextSpan(text: ' and '),
+                  TextSpan(
+                    text: 'Privacy Policy',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.pushNamed(
+                            context, PrivacyPolicyScreen.routeName);
+                      },
+                  ),
+                ],
+              ),
+            ),
             actions: <Widget>[
               TextButton(
                 child: Text("I accept"),
@@ -385,82 +412,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
         },
       );
     }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Release of Interest", textAlign: TextAlign.center),
-          content: Text.rich(
-            TextSpan(
-              text: _waverMessage,
-              children: [
-                TextSpan(text: '\n                    \n'),
-                TextSpan(text: 'By continuing, you agree to our '),
-                TextSpan(
-                  text: 'Terms of Service',
-                  style: TextStyle(decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.pushNamed(
-                          context, TermsOfServiceScreen.routeName);
-                    },
-                ),
-                TextSpan(text: ' and '),
-                TextSpan(
-                  text: 'Privacy Policy',
-                  style: TextStyle(decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.pushNamed(
-                          context, PrivacyPolicyScreen.routeName);
-                    },
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("I accept"),
-              onPressed: () {
-                retrieveLocation();
-                FirebaseFirestore.instance.collection('bikes').add({
-                  'bikeName': nameController.text != ""
-                      ? nameController.text.trim()
-                      : "Unnamed",
-                  'latitude': locationData != null ? locationData.latitude : 45,
-                  'longitude':
-                      locationData != null ? locationData.longitude : 30,
-                  'tags': tags,
-                  'rating': null,
-                  'averageRating': null,
-                  'photoUrl': imageURL,
-                  'isBeingUsed': false,
-                  'lockCombo': lockControllerOne.text != ""
-                      ? (lockControllerOne.text +
-                          "-" +
-                          lockControllerTwo.text +
-                          "-" +
-                          lockControllerThree.text)
-                      : "No Combo Entered",
-                  'donatedUserEmail':
-                      user != null ? user.email : "default@email.com",
-                  'riderEmail': null,
-                });
-                Navigator.pushNamed(context, MapScreen.routeName);
-              },
-            ),
-            TextButton(
-              child: Text("Close"),
-              onPressed: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName(AddBikeScreen.routeName));
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future loadText() async {
