@@ -37,7 +37,7 @@ class DatabaseService {
         .get()
         .then((doc) => {
               doc.docs.firstWhere(
-                  (element) => element['riderEmail'] == bike.riderEmail,
+                  (element) => element['photoUrl'] == bike.photoUrl,
                   orElse: null)
             });
     if (snapshot == null) {
