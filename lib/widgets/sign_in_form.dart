@@ -106,7 +106,7 @@ class _SignInFormState extends State<SignInForm> {
     return CoolButton(
         title: 'Sign in',
         textColor: Colors.white,
-        filledColor: Colors.green,
+        filledColor: Colors.cyan[500],
         onPressed: () async {
           setState(() {
             eMessage = "";

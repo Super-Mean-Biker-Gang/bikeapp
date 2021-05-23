@@ -401,7 +401,7 @@ class MapScreenState extends State<MapScreen> {
           },
           tooltip: 'Center map on Location',
           child: Icon(Icons.my_location),
-          backgroundColor: Colors.blue),
+          backgroundColor: Colors.cyan[500]),
     );
   }
 
@@ -471,7 +471,7 @@ class MapScreenState extends State<MapScreen> {
                       },
                       tooltip: 'Account Access',
                       icon: Icon(Icons.account_circle_outlined,
-                          color: Colors.blue,
+                          color: Colors.cyan[500],
                           size: queryData.textScaleFactor * 40),
                     ),
                   ],
@@ -572,6 +572,15 @@ class MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
+          SizedBox(height: 25),
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Text(
+              'Swipe left to dismiss',
+              style: TextStyle(fontSize: queryData.textScaleFactor * 15),
+            ),
+          ),
+          SizedBox(height: 20),
         ],
       ),
     );
@@ -641,7 +650,7 @@ class MapScreenState extends State<MapScreen> {
 
   Widget hybridBikeFilterChip() {
     return FilterChip(
-      label: Text('hybrid Bike'),
+      label: Text('Hybrid Bike'),
       selected: _hybridBikeSelected,
       onSelected: (bool selected) {
         setState(() {
