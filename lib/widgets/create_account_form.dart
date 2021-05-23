@@ -50,10 +50,9 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             SizedBox(height: responsiveHeight(20.0)),
             submitButton(context),
             SizedBox(height: responsiveHeight(40.0)),
-            Text(
-              "Already have an account?", 
-              textAlign: TextAlign.left,
-              style: TextStyle(color: Colors.white)),
+            Text("Already have an account?",
+                textAlign: TextAlign.left,
+                style: TextStyle(color: Colors.white)),
             TextButton(
               child: Text("Login here!", style: TextStyle(color: Colors.pink)),
               onPressed: () {
@@ -66,7 +65,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     );
   }
 
-    Widget emailTextField() {
+  Widget emailTextField() {
     return TextFormField(
       controller: emailController,
       keyboardType: TextInputType.emailAddress,
@@ -104,7 +103,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     );
   }
 
-    Widget confirmPasswordTextField() {
+  Widget confirmPasswordTextField() {
     return TextFormField(
       controller: confirmPasswordController,
       obscureText: true,
@@ -127,61 +126,58 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
 
   Widget submitButton(BuildContext context) {
     return CoolButton(
-        title: 'Register',
-        textColor: Colors.white,
-        filledColor: Colors.pink,     
-        onPressed: () {
-          if (_registerFormKey.currentState.validate()) {
-            if (passwordController.text == confirmPasswordController.text) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text("Waiver"),
-                    // Eventually read this from a text doc
-                    content: Text(_waverMessage),
-                    actions: <Widget>[
-                      TextButton(
-                          child: Text("I accept"),
-                          onPressed: () {
-                            registerAndSignIn(context);
-                          }),
-                      TextButton(
-                        child: Text("Close"),
+      title: 'Register',
+      textColor: Colors.white,
+      filledColor: Colors.pink,
+      onPressed: () {
+        if (_registerFormKey.currentState.validate()) {
+          if (passwordController.text == confirmPasswordController.text) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Waiver"),
+                  // Eventually read this from a text doc
+                  content: Text(_waverMessage),
+                  actions: <Widget>[
+                    TextButton(
+                        child: Text("I accept"),
                         onPressed: () {
-                          Navigator.popUntil(
-                              context,
-                              ModalRoute.withName(
-                                  CreateAccountScreen.routeName));
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            } else {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text("Error"),
-                    content: Text("The passwords do not match"),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text("Close"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
+                          registerAndSignIn(context);
+                        }),
+                    TextButton(
+                      child: Text("Close"),
+                      onPressed: () {
+                        Navigator.popUntil(context,
+                            ModalRoute.withName(CreateAccountScreen.routeName));
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Error"),
+                  content: Text("The passwords do not match"),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text("Close"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           }
-        },
-      );
-    
+        }
+      },
+    );
   }
 
   void registerAndSignIn(BuildContext context) {
@@ -199,12 +195,12 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             content: Text("Account with email already exists"),
             actions: <Widget>[
               TextButton(
-                  child: Text("Close"),
-                  onPressed: () {
-                    Navigator.popUntil(context,
-                        ModalRoute.withName(CreateAccountScreen.routeName));
-                  },
-                ),
+                child: Text("Close"),
+                onPressed: () {
+                  Navigator.popUntil(context,
+                      ModalRoute.withName(CreateAccountScreen.routeName));
+                },
+              ),
             ],
           );
         },

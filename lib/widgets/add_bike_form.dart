@@ -9,6 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:bikeapp/styles/custom_input_decoration.dart';
+import 'package:bikeapp/models/responsive_size.dart';
 
 const WAVER_PATH = 'assets/text_files/donateBikeWaver.txt';
 
@@ -29,6 +31,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
   TextEditingController nameController = new TextEditingController();
   String imageURL;
   String _waverMessage;
+  String name;
   List<String> tags = [];
 
   void getImage() async {
@@ -80,60 +83,54 @@ class _AddBikeFormState extends State<AddBikeForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 20),
-          showImage(context),
-          SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                child: Text('Select Photo'),
-                onPressed: () {
-                  getImage();
-                },
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                child: Text('Use Camera'),
-                onPressed: () {
-                  takePhoto();
-                },
-              ),
-            ],
-          ),
-          SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0),
-            child: TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                hintText: "Bike Name",
-              ),
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.text,
+    return Container(
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            SizedBox(height: responsiveHeight(20.0)),
+            showImage(context),
+            SizedBox(height: responsiveHeight(20.0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                selectPhotoButton(context),
+                SizedBox(width: 10),
+                useCamerButton(
+                  context,
+                )
+              ],
             ),
-          ),
-          SizedBox(height: 60),
-          Text("Lock Combination"),
-          lockInput(context),
-          SizedBox(height: 40),
-          bikeTagCheckBoxes(context),
-          SizedBox(height: 20),
-          FractionallySizedBox(
-            widthFactor: 0.5,
-            child: ElevatedButton(
-              child: Text('Add Bike!'),
-              onPressed: () {
-                submitAddBike();
-              },
-            ),
-          ),
-          SizedBox(height: 20),
-        ]),
+            SizedBox(height: responsiveHeight(20.0)),
+            bikeNameField(),
+            SizedBox(height: responsiveHeight(20.0)),
+            Text("Lock Combination", style: TextStyle(color: Colors.white)),
+            lockInput(context),
+            SizedBox(height: responsiveHeight(20.0)),
+            bikeTagCheckBoxes(context),
+            SizedBox(height: responsiveHeight(20.0)),
+            addBikeButton(context),
+            SizedBox(height: responsiveHeight(20.0)),
+          ]),
+        ),
       ),
+    );
+  }
+
+  Widget bikeNameField() {
+    return TextFormField(
+      controller: nameController,
+      keyboardType: TextInputType.text,
+      style: TextStyle(color: Colors.white),
+      decoration: customInputDecoration(
+          hint: 'Bike name', icon: Icon(Icons.pedal_bike) // WILL CHANGE LATER
+          ),
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter a bike name';
+        }
+        return null;
+      },
+      onSaved: (value) => name = value.trim(),
     );
   }
 
@@ -146,6 +143,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
         children: <Widget>[
           Flexible(
             child: TextField(
+              style: TextStyle(color: Colors.white),
               controller: lockControllerOne,
               decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
               textAlign: TextAlign.center,
@@ -161,6 +159,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
           SizedBox(width: 20.0),
           Flexible(
             child: TextField(
+              style: TextStyle(color: Colors.white),
               controller: lockControllerTwo,
               decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
               textAlign: TextAlign.center,
@@ -176,6 +175,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
           SizedBox(width: 20.0),
           Flexible(
             child: TextField(
+              style: TextStyle(color: Colors.white),
               controller: lockControllerThree,
               decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
               textAlign: TextAlign.center,
@@ -208,74 +208,180 @@ class _AddBikeFormState extends State<AddBikeForm> {
     }
   }
 
+  Widget selectPhotoButton(BuildContext context) {
+    return SizedBox(
+      height: responsiveWidth(26.0),
+      child: ElevatedButton(
+          child: Text(
+            "Select Photo",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: responsiveWidth(12.0),
+            ),
+          ),
+          onPressed: () {
+            getImage();
+          },
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.cyan),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  side: BorderSide(
+                    color: Colors.cyanAccent,
+                    width: responsiveWidth(1.0),
+                  ))))),
+    );
+  }
+
+  Widget useCamerButton(BuildContext context) {
+    return SizedBox(
+      height: responsiveWidth(26.0),
+      child: ElevatedButton(
+          child: Text(
+            "Use Camera",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: responsiveWidth(12.0),
+            ),
+          ),
+          onPressed: () {
+            takePhoto();
+          },
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.cyan),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  side: BorderSide(
+                    color: Colors.cyanAccent,
+                    width: responsiveWidth(1.0),
+                  ))))),
+    );
+  }
+
+  Widget addBikeButton(BuildContext context) {
+    return SizedBox(
+      width: responsiveWidth(160.0),
+      height: responsiveWidth(26.0),
+      child: ElevatedButton(
+          child: Text(
+            "Add Bike",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: responsiveWidth(12.0),
+            ),
+          ),
+          onPressed: () {
+            submitAddBike();
+          },
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.cyan),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  side: BorderSide(
+                    color: Colors.cyanAccent,
+                    width: responsiveWidth(1.0),
+                  ))))),
+    );
+  }
+
   Widget bikeTagCheckBoxes(BuildContext context) {
     return Column(
       children: [
-        CheckboxGroup(
-          labels: <String>["Road Bike", "Mountain Bike", "Hybrid"],
-          onChange: (bool isChecked, String label, int index) {
-            if (isChecked && !tags.contains(label)) {
-              tags.add(label);
-            } else if (!isChecked && tags.contains(label)) {
-              tags.remove(label);
-            }
-            setState(() {});
-          },
+        Container(
+          child: CheckboxGroup(
+            labelStyle: TextStyle(
+              color: Colors.white,
+            ),
+            activeColor: Colors.white,
+            checkColor: Colors.cyan,
+            labels: <String>["Road Bike", "Mountain Bike", "Hybrid"],
+            onChange: (bool isChecked, String label, int index) {
+              if (isChecked && !tags.contains(label)) {
+                tags.add(label);
+              } else if (!isChecked && tags.contains(label)) {
+                tags.remove(label);
+              }
+              setState(() {});
+            },
+          ),
         ),
       ],
     );
   }
 
   void submitAddBike() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Waiver"),
-          // Eventually read this from a text doc
-          content: Text(_waverMessage),
-          actions: <Widget>[
-            TextButton(
-              child: Text("I accept"),
-              onPressed: () {
-                retrieveLocation();
-                FirebaseFirestore.instance.collection('bikes').add({
-                  'bikeName': nameController.text != ""
-                      ? nameController.text.trim()
-                      : "Unnamed",
-                  'latitude': locationData != null ? locationData.latitude : 45,
-                  'longitude':
-                      locationData != null ? locationData.longitude : 30,
-                  'tags': tags,
-                  'rating': null,
-                  'averageRating': null,
-                  'photoUrl': imageURL,
-                  'isBeingUsed': false,
-                  'lockCombo': lockControllerOne.text != ""
-                      ? (lockControllerOne.text +
-                          "-" +
-                          lockControllerTwo.text +
-                          "-" +
-                          lockControllerThree.text)
-                      : "No Combo Entered",
-                  'donatedUserEmail':
-                      user != null ? user.email : "default@email.com",
-                  'riderEmail': null,
-                });
-                Navigator.pushNamed(context, MapScreen.routeName);
-              },
-            ),
-            TextButton(
-              child: Text("Close"),
-              onPressed: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName(AddBikeScreen.routeName));
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (imageURL == null) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("No Photo Selected"),
+              content: Text(
+                  'Please select a photo from gallery, or use camera to take one'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Go back"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Waiver"),
+            content: Text(_waverMessage),
+            actions: <Widget>[
+              TextButton(
+                child: Text("I accept"),
+                onPressed: () {
+                  retrieveLocation();
+                  FirebaseFirestore.instance.collection('bikes').add({
+                    'bikeName': nameController.text != ""
+                        ? nameController.text.trim()
+                        : "Unnamed",
+                    'latitude':
+                        locationData != null ? locationData.latitude : 45,
+                    'longitude':
+                        locationData != null ? locationData.longitude : 30,
+                    'tags': tags,
+                    'rating': null,
+                    'averageRating': null,
+                    'photoUrl': imageURL,
+                    'isBeingUsed': false,
+                    'lockCombo': lockControllerOne.text != ""
+                        ? (lockControllerOne.text +
+                            "-" +
+                            lockControllerTwo.text +
+                            "-" +
+                            lockControllerThree.text)
+                        : "No Combo Entered",
+                    'donatedUserEmail':
+                        user != null ? user.email : "default@email.com",
+                    'riderEmail': null,
+                  });
+                  Navigator.pushNamed(context, MapScreen.routeName);
+                },
+              ),
+              TextButton(
+                child: Text("Close"),
+                onPressed: () {
+                  Navigator.popUntil(
+                      context, ModalRoute.withName(AddBikeScreen.routeName));
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   Future loadText() async {
