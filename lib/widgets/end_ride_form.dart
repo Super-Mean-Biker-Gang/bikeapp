@@ -1,6 +1,7 @@
 import 'package:bikeapp/models/bike.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/database_service.dart';
+import 'package:bikeapp/widgets/location_services_denied_popup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,9 +37,15 @@ class _EndRideFormState extends State<EndRideForm> {
     setState(() {});
   }
 
+  //********************************************************************************** */
+  /*                                  MAIN WIDGET                                      */
+  //********************************************************************************** */
   @override
   Widget build(BuildContext context) {
-    if (currentBike == null) {
+    locationData = null;
+    if (locationData == null) {
+      return LocationServicesDeniedPopup();
+    } else if (currentBike == null) {
       return CircularProgressIndicator();
     } else {
       return SingleChildScrollView(
