@@ -8,6 +8,8 @@ import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:bikeapp/styles/color_gradients.dart';
 import 'package:bikeapp/styles/cool_button.dart';
+import 'package:location/location.dart';
+import 'dart:math';
 
 class CheckoutForm extends StatefulWidget {
   static const routeName = 'check_out_form';
@@ -19,6 +21,72 @@ class CheckoutForm extends StatefulWidget {
 class _CheckoutFormState extends State<CheckoutForm> {
   double newRating;
   final user = AuthenticationService(FirebaseAuth.instance).getUser();
+  LocationData locationData;
+  double userLat;
+  double userLon;
+  double bikeLat;
+  double bikeLon;
+  static final R = 6372.8; // In kilometers
+
+  @override
+  void initState() {
+    super.initState();
+    retrieveLocation();
+  }
+
+  void retrieveLocation() async {
+    var locationService = Location();
+    locationData = await locationService.getLocation();
+    setState(() {
+      userLon = locationData.longitude;
+      userLat = locationData.latitude;
+    });
+  }
+
+  void retrieveBikeLocation(Bike checkoutBike) {
+    setState(() {
+      bikeLat = checkoutBike.latitude;
+      // print('${checkoutBike.latitude}');
+      bikeLon = checkoutBike.longitude;
+      // print('${checkoutBike.longitude}');
+    });
+  }
+
+  // Taken from source: https://github.com/shawnchan2014/haversine-dart/blob/master/Haversine.dart
+  static double haversine(double lat1, lon1, lat2, lon2) {
+    double dLat = _toRadians(lat2 - lat1);
+    double dLon = _toRadians(lon2 - lon1);
+    lat1 = _toRadians(lat1);
+    lat2 = _toRadians(lat2);
+    double a =
+        pow(sin(dLat / 2), 2) + pow(sin(dLon / 2), 2) * cos(lat1) * cos(lat2);
+    double c = 2 * asin(sqrt(a));
+    return R * c * 3280.84; // Convert to feet
+  }
+
+  static double _toRadians(double degree) {
+    return degree * pi / 180;
+  }
+
+  void checkDistance() {
+    if (userLat == null ||
+        userLon == null ||
+        bikeLat == null ||
+        bikeLon == null) {
+      print('user latitude is: $userLat');
+      print('user longitude is: $userLon');
+      print('Bike latitude is: $bikeLat');
+      print('Bike longitude is: $bikeLon');
+      showLocationPermissionDialog();
+    } else {
+      var distanceInFeet = haversine(userLat, userLon, bikeLat, bikeLon);
+      if (distanceInFeet > 60) {
+        showDistanceDialog();
+      } else {
+        print('You did it!');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +172,10 @@ class _CheckoutFormState extends State<CheckoutForm> {
         textColor: Colors.white,
         filledColor: Colors.green,
         onPressed: () {
-          checkoutUpdate(checkoutBike);
-          checkoutPopUp(context, checkoutBike);
+          // checkoutUpdate(checkoutBike);
+          // checkoutPopUp(context, checkoutBike);
+          retrieveBikeLocation(checkoutBike);
+          checkDistance();
         },
       ),
     );
@@ -166,5 +236,55 @@ class _CheckoutFormState extends State<CheckoutForm> {
       return null;
     }
     return snapshot.first.id;
+  }
+
+  showDistanceDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Too Far Away",
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+              'Please stand within 60 feet of the bike you are checking out to use this feature. \n \nIf you believe you are within 60 feet of the bike already, try refreshing the page by navigating back to the map and attempting to check out the bike again.',
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  showLocationPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Location Permissions Denied",
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+              'Location permission are denied. \n \nLocation permissions must be enabled to use this feature.',
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
