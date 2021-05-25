@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bikeapp/widgets/location_services_denied_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -89,21 +90,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
   //********************************************************************************** */
   @override
   Widget build(BuildContext context) {
-    locationData = null;
     if (locationData == null) {
-      return AlertDialog(
-        title: Text("Location Services - Denied"),
-        content: Text(
-            'Please allow location services to use this feature'),
-        actions: <Widget>[
-          TextButton(
-            child: Text("Go back"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      );          
+      return LocationServicesDeniedPopup();         
     } else {
     return Container(
       child: SingleChildScrollView(
