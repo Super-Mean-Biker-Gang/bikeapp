@@ -406,7 +406,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
                         user != null ? user.email : "default@email.com",
                     'riderEmail': null,
                     'isStolen': false,
-                    'notes' : null,
+                    'notes': null,
                   });
                   Navigator.pushNamed(context, MapScreen.routeName);
                 },
