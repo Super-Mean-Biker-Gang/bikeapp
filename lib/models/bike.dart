@@ -11,6 +11,8 @@ class Bike {
   String riderEmail;
   String lockCombo;
   String donatedUserEmail;
+  bool isStolen;
+  List<String> notes;
 
   Bike([
     this.bikeName = "Bike's Name",
@@ -23,6 +25,7 @@ class Bike {
     this.isBeingUsed = false,
     this.lockCombo = "04-04-04",
     this.donatedUserEmail = "someonesEmail@email.com",
+    this.isStolen = false,
   ]);
 
   Bike.fromMap([Map<String, dynamic> map]) {
@@ -39,5 +42,7 @@ class Bike {
     this.riderEmail = map['riderEmail'];
     this.lockCombo = map['lockCombo'];
     this.donatedUserEmail = map['donatedUserEmail'];
+    this.isStolen = map['isStolen'];
+    this.notes = map['notes'];
   }
 }
