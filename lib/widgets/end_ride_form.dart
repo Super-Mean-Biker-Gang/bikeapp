@@ -44,7 +44,7 @@ class _EndRideFormState extends State<EndRideForm> {
   Widget build(BuildContext context) {
     locationData = null;
     if (locationData == null) {
-      return LocationServicesDeniedPopup();          
+      return LocationServicesDeniedPopup();
     } else if (currentBike == null) {
       return CircularProgressIndicator();
     } else {
