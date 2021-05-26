@@ -12,6 +12,7 @@ import 'package:bikeapp/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:bikeapp/widgets/check_out_form.dart';
 import 'package:bikeapp/widgets/map_view.dart';
 
 class App extends StatefulWidget {
@@ -31,7 +32,8 @@ class _AppState extends State<App> {
     EndRideScreen.routeName: (context) => EndRideScreen(),
     PrivacyPolicyScreen.routeName: (context) => PrivacyPolicyScreen(),
     TermsOfServiceScreen.routeName: (context) => TermsOfServiceScreen(),
-    TimerScreen.routeName: (context) => TimerScreen()
+    TimerScreen.routeName: (context) => TimerScreen(),
+    CheckoutForm.routeName: (context) => CheckoutForm(),
   };
 
   @override
