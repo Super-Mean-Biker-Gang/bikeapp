@@ -35,7 +35,7 @@ class Bike {
     this.tags = map['tags'];
     //this.tags = ['a', 'b', 'c']; // DELETE LATER
     this.rating = map['rating'];
-    this.averageRating = map['averageRating'];
+    this.averageRating = map['averageRating'].toDouble();
     this.photoUrl = map['photoUrl'];
     this.isBeingUsed = map['isBeingUsed'];
     this.checkoutTime = map['checkoutTime'];
