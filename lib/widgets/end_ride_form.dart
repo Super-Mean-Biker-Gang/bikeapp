@@ -19,8 +19,10 @@ class _EndRideFormState extends State<EndRideForm> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   User user;
   TextEditingController ratingController = new TextEditingController();
+  TextEditingController noteController = new TextEditingController();
   Bike currentBike;
   double newRating;
+  String note;
 
   @override
   void initState() {
@@ -42,7 +44,6 @@ class _EndRideFormState extends State<EndRideForm> {
   //********************************************************************************** */
   @override
   Widget build(BuildContext context) {
-    locationData = null;
     if (locationData == null) {
       return LocationServicesDeniedPopup();
     } else if (currentBike == null) {
@@ -58,21 +59,33 @@ class _EndRideFormState extends State<EndRideForm> {
               Text("Rate your ride"),
               SizedBox(height: 30),
               RatingBar.builder(
-                  initialRating: 3,
-                  minRating: 0.5,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                  itemBuilder: (context, _) => Icon(
-                        Icons.star,
-                        color: Colors.purple,
-                      ),
-                  onRatingUpdate: (rating) {
-                    if (rating != null) {
-                      newRating = rating;
-                    }
-                  }),
+                initialRating: 3,
+                minRating: 0.5,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.purple,
+                    ),
+                onRatingUpdate: (rating) {
+                  if (rating != null) {
+                    newRating = rating;
+                  }
+                },
+              ),
+              SizedBox(height: 40),
+              Text("Comments about bike"),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                child: TextField(
+                  controller: noteController,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1,//Normal textInputField will be displayed
+                  maxLines: 5,// when user presses enter it will adapt to it
+                ),
+              ),
               SizedBox(height: 30),
               ElevatedButton(
                 child: Text("End Ride"),
@@ -95,7 +108,8 @@ class _EndRideFormState extends State<EndRideForm> {
   }
 
   void endRide(double newRating) async {
-    databaseService.endRide(newRating, currentBike, locationData);
+    note = noteController.text;
+    databaseService.endRide(newRating, currentBike, locationData, note);
     // go back to maps screen
     Navigator.of(context).pushNamed(MapScreen.routeName);
     // may want to eventually base redirect on global state of if user is using bike

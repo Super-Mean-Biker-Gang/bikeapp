@@ -141,7 +141,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
       keyboardType: TextInputType.text,
       style: TextStyle(color: Colors.white),
       decoration: customInputDecoration(
-          hint: 'Bike name', icon: Icon(Icons.pedal_bike) // WILL CHANGE LATER
+          hint: 'Bike name', icon: Icon(Icons.pedal_bike)
           ),
       validator: (value) {
         if (value.isEmpty) {

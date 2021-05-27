@@ -2,7 +2,7 @@ class Bike {
   String bikeName;
   double latitude;
   double longitude;
-  String tags;
+  String tag;
   List<dynamic> rating;
   double averageRating;
   String photoUrl;
@@ -18,7 +18,7 @@ class Bike {
     this.bikeName = "Bike's Name",
     this.latitude = 4.0,
     this.longitude = 4.0,
-    this.tags = "Mountain Bike",
+    this.tag = "Mountain Bike",
     this.rating = const [4.0],
     this.averageRating = 4.0,
     this.photoUrl = "fakeurl.com",
@@ -30,11 +30,11 @@ class Bike {
 
   Bike.fromMap([Map<String, dynamic> map]) {
     this.bikeName = map['bikeName'];
-    this.latitude = map['latidude'];
+    this.latitude = map['latitude'];
     this.longitude = map['longitude'];
-    this.tags = map['tags'];    
+    this.tag = map['tag'];    
     this.rating = map['rating'];
-    this.averageRating = map['averageRating'].toDouble();
+    this.averageRating = map['averageRating'] != null ? map['averageRating'].toDouble() : null;
     this.photoUrl = map['photoUrl'];
     this.isBeingUsed = map['isBeingUsed'];
     this.checkoutTime = map['checkoutTime'];
