@@ -2,7 +2,7 @@ class Bike {
   String bikeName;
   double latitude;
   double longitude;
-  List<dynamic> tags;
+  String tags;
   List<dynamic> rating;
   double averageRating;
   String photoUrl;
@@ -12,13 +12,13 @@ class Bike {
   String lockCombo;
   String donatedUserEmail;
   bool isStolen;
-  List<String> notes;
+  List<dynamic> notes;
 
   Bike([
     this.bikeName = "Bike's Name",
     this.latitude = 4.0,
     this.longitude = 4.0,
-    this.tags = const ["Mountain Bike", "Old"],
+    this.tags = "Mountain Bike",
     this.rating = const [4.0],
     this.averageRating = 4.0,
     this.photoUrl = "fakeurl.com",
@@ -32,8 +32,7 @@ class Bike {
     this.bikeName = map['bikeName'];
     this.latitude = map['latidude'];
     this.longitude = map['longitude'];
-    this.tags = map['tags'];
-    //this.tags = ['a', 'b', 'c']; // DELETE LATER
+    this.tags = map['tags'];    
     this.rating = map['rating'];
     this.averageRating = map['averageRating'].toDouble();
     this.photoUrl = map['photoUrl'];
