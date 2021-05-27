@@ -40,7 +40,7 @@ class _EndRideFormState extends State<EndRideForm> {
   }
 
   //********************************************************************************** */
-  /*                                  MAIN WIDGET                                      */
+  //                                  MAIN WIDGET                                      */
   //********************************************************************************** */
   @override
   Widget build(BuildContext context) {
