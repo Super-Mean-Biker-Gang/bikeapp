@@ -62,9 +62,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
     if (pickedFile != null) {
       image = File(pickedFile.path);
       FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref = storage
-          .ref()
-          .child("image " + DateTime.now().toString());
+      Reference ref = storage.ref().child("image " + DateTime.now().toString());
       UploadTask uploadTask = ref.putFile(image);
       uploadTask.then((res) async {
         imageURL = await res.ref.getDownloadURL();
@@ -99,10 +97,11 @@ class _AddBikeFormState extends State<AddBikeForm> {
       return Container(
         child: SingleChildScrollView(
           child: Center(
-            child:
-              Form(
-                key: _formKey,
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   SizedBox(height: responsiveHeight(20.0)),
                   showImage(context),
                   SizedBox(height: responsiveHeight(20.0)),
@@ -119,7 +118,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
                   SizedBox(height: responsiveHeight(20.0)),
                   bikeNameField(),
                   SizedBox(height: responsiveHeight(20.0)),
-                  Text("Lock Combination", style: TextStyle(color: Colors.white)),
+                  Text("Lock Combination",
+                      style: TextStyle(color: Colors.white)),
                   lockInput(context),
                   SizedBox(height: responsiveHeight(20.0)),
                   bikeTagCheckBoxes(context),
@@ -127,8 +127,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
                   addBikeButton(context),
                   SizedBox(height: responsiveHeight(20.0)),
                 ],
-            ),
               ),
+            ),
           ),
         ),
       );
@@ -141,8 +141,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
       keyboardType: TextInputType.text,
       style: TextStyle(color: Colors.white),
       decoration: customInputDecoration(
-          hint: 'Bike name', icon: Icon(Icons.pedal_bike)
-          ),
+          hint: 'Bike name', icon: Icon(Icons.pedal_bike)),
       validator: (value) {
         if (value.isEmpty) {
           return 'Please enter a bike name';
@@ -163,12 +162,12 @@ class _AddBikeFormState extends State<AddBikeForm> {
           Flexible(
             child: TextFormField(
               validator: (value) {
-                if(value == null || value.isEmpty) {
+                if (value == null || value.isEmpty) {
                   return 'All three locks numbers must be entered';
                 } else {
                   return null;
                 }
-              },            
+              },
               style: TextStyle(color: Colors.white),
               controller: lockControllerOne,
               decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
@@ -186,7 +185,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
           Flexible(
             child: TextFormField(
               validator: (value) {
-                if(value == null || value.isEmpty) {
+                if (value == null || value.isEmpty) {
                   return 'All three locks numbers must be entered';
                 } else {
                   return null;
@@ -202,14 +201,14 @@ class _AddBikeFormState extends State<AddBikeForm> {
                 if (lockControllerTwo.text.length > 1) {
                   node.nextFocus();
                 }
-              },              
+              },
             ),
           ),
           SizedBox(width: 20.0),
           Flexible(
             child: TextFormField(
               validator: (value) {
-                if(value == null || value.isEmpty) {
+                if (value == null || value.isEmpty) {
                   return 'All three locks numbers must be entered';
                 } else {
                   return null;
@@ -264,15 +263,16 @@ class _AddBikeFormState extends State<AddBikeForm> {
           getImage();
         },
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.cyan),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
-            side: BorderSide(
-              color: Colors.cyanAccent,
-              width: responsiveWidth(1.0),
-            ),
-          ),
-        )),
+            backgroundColor: MaterialStateProperty.all(Colors.cyan),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                side: BorderSide(
+                  color: Colors.cyanAccent,
+                  width: responsiveWidth(1.0),
+                ),
+              ),
+            )),
       ),
     );
   }
@@ -333,7 +333,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
               color: Colors.cyanAccent,
               width: responsiveWidth(1.0),
             ),
-          )),            
+          )),
         ),
       ),
     );
@@ -353,7 +353,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
           },
         ),
         RadioListTile<BikeTag>(
-          title: const Text('Mountain Bike', style: TextStyle(color: Colors.white)),
+          title: const Text('Mountain Bike',
+              style: TextStyle(color: Colors.white)),
           value: BikeTag.MOUNTAIN,
           groupValue: tag,
           onChanged: (value) {
@@ -363,7 +364,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
           },
         ),
         RadioListTile<BikeTag>(
-          title: const Text('Hybrid Bike', style: TextStyle(color: Colors.white)),
+          title:
+              const Text('Hybrid Bike', style: TextStyle(color: Colors.white)),
           value: BikeTag.HYBRID,
           groupValue: tag,
           onChanged: (value) {

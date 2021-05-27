@@ -32,9 +32,10 @@ class Bike {
     this.bikeName = map['bikeName'];
     this.latitude = map['latitude'];
     this.longitude = map['longitude'];
-    this.tag = map['tag'];    
+    this.tag = map['tag'];
     this.rating = map['rating'];
-    this.averageRating = map['averageRating'] != null ? map['averageRating'].toDouble() : null;
+    this.averageRating =
+        map['averageRating'] != null ? map['averageRating'].toDouble() : null;
     this.photoUrl = map['photoUrl'];
     this.isBeingUsed = map['isBeingUsed'];
     this.checkoutTime = map['checkoutTime'];

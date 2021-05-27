@@ -66,9 +66,9 @@ class _EndRideFormState extends State<EndRideForm> {
                 itemCount: 5,
                 itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
                 itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.purple,
-                    ),
+                  Icons.star,
+                  color: Colors.purple,
+                ),
                 onRatingUpdate: (rating) {
                   if (rating != null) {
                     newRating = rating;
@@ -82,8 +82,8 @@ class _EndRideFormState extends State<EndRideForm> {
                 child: TextField(
                   controller: noteController,
                   keyboardType: TextInputType.multiline,
-                  minLines: 1,//Normal textInputField will be displayed
-                  maxLines: 5,// when user presses enter it will adapt to it
+                  minLines: 1, //Normal textInputField will be displayed
+                  maxLines: 5, // when user presses enter it will adapt to it
                 ),
               ),
               SizedBox(height: 30),
