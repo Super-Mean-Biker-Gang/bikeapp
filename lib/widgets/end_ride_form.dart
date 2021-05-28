@@ -45,7 +45,7 @@ class _EndRideFormState extends State<EndRideForm> {
   @override
   Widget build(BuildContext context) {
     if (currentBike == null) {
-      return CircularProgressIndicator();
+      return Center(child: CircularProgressIndicator());
     } else {
       return Container(
         child: SingleChildScrollView(
