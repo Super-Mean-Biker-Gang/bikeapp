@@ -113,9 +113,22 @@ class _CheckoutFormState extends State<CheckoutForm> {
                   ),
                 ),
                 SizedBox(height: responsiveHeight(20.0)),
-                checkoutBike.photoUrl == null
-                    ? Icon(Icons.image_outlined, size: responsiveWidth(100.0))
-                    : Image.network(checkoutBike.photoUrl.toString()),
+                // checkoutBike.photoUrl == null
+                //     ? Icon(Icons.image_outlined, size: responsiveWidth(100.0))
+                //     : Image.network(checkoutBike.photoUrl.toString()),
+                Image.network(checkoutBike.photoUrl.toString(),
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes
+                        : null,
+                      ),
+                    );
+                  },
+                ),
                 SizedBox(height: responsiveHeight(10.0)),
                 Text(
                   'Bike Type: ${checkoutBike.tag}',
@@ -161,9 +174,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
         Icons.star,
         color: Colors.yellowAccent,
       ),
-      onRatingUpdate: (rating) {
-        print(rating);
-      },
+      onRatingUpdate: (rating) {},
     );
   }
 
