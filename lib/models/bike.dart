@@ -30,7 +30,7 @@ class Bike {
 
   Bike.fromMap([Map<String, dynamic> map]) {
     this.bikeName = map['bikeName'];
-    this.latitude = map['latidude'];
+    this.latitude = map['latitude'];
     this.longitude = map['longitude'];
     this.tags = map['tags'];
     //this.tags = ['a', 'b', 'c']; // DELETE LATER

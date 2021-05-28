@@ -195,7 +195,8 @@ class MapScreenState extends State<MapScreen> {
     FirebaseFirestore.instance.collection('bikes').get().then((doc) {
       if (doc.docs.isNotEmpty) {
         for (int i = 0; i < doc.docs.length; ++i) {
-          if (doc.docs[i].data()['isBeingUsed'] == false) {
+          if (doc.docs[i].data()['isBeingUsed'] == false &&
+              doc.docs[i].data()['isStolen'] == false) {
             filterData(doc.docs[i].data(), doc.docs[i].id);
           }
         }
@@ -210,11 +211,11 @@ class MapScreenState extends State<MapScreen> {
   }
 
   void filterData(item, id) {
-    List tags = item['tags'];
-    filterByTag(tags, item, id);
+    String tag = item['tag'];
+    filterByTag(tag, item, id);
   }
 
-  void filterByTag(tags, item, id) {
+  void filterByTag(tag, item, id) {
     if (!_roadBikeSelected &&
         !_mountainBikeSelected &&
         !_hybridBikeSelected &&
@@ -222,30 +223,18 @@ class MapScreenState extends State<MapScreen> {
       filterByRating(item, id);
     }
     if (_roadBikeSelected) {
-      if (tags.isNotEmpty) {
-        for (var i = 0; i < tags.length; i++) {
-          if (tags[i] == 'Road Bike') {
-            filterByRating(item, id);
-          }
-        }
+      if (tag == 'ROAD') {
+        filterByRating(item, id);
       }
     }
     if (_mountainBikeSelected) {
-      if (tags.isNotEmpty) {
-        for (var i = 0; i < tags.length; i++) {
-          if (tags[i] == 'Mountain Bike') {
-            filterByRating(item, id);
-          }
-        }
+      if (tag == 'MOUNTAIN') {
+        filterByRating(item, id);
       }
     }
     if (_hybridBikeSelected) {
-      if (tags.isNotEmpty) {
-        for (var i = 0; i < tags.length; i++) {
-          if (tags[i] == 'Hybrid Bike') {
-            filterByRating(item, id);
-          }
-        }
+      if (tag == 'HYBRID') {
+        filterByRating(item, id);
       }
     }
     if (!_roadBikeSelected &&
