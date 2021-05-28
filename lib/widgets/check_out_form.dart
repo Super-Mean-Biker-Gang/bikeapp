@@ -98,34 +98,48 @@ class _CheckoutFormState extends State<CheckoutForm> {
         appBar: AppBar(title: Text('Check out')),
         backgroundColor: Colors.transparent,
         body: SafeArea(
-          child: SizedBox(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: responsiveHeight(35.0),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Text(
-                      checkoutBike.tag,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: responsiveWidth(18.0),
-                        fontWeight: FontWeight.w500,
-                      ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: responsiveHeight(20.0)),
+                  child: Text(
+                    '${checkoutBike.bikeName}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsiveWidth(25.0),
+                      fontWeight: FontWeight.w500,
                     ),
-                    SizedBox(height: responsiveHeight(20.0)),
-                    checkoutBike.photoUrl == null
-                        ? Icon(Icons.image_outlined,
-                            size: responsiveWidth(100.0))
-                        : Image.network(checkoutBike.photoUrl.toString()),
-                    SizedBox(height: responsiveHeight(20.0)),
-                    displayRating(checkoutBike),
-                    SizedBox(height: responsiveHeight(20.0)),
-                    checkoutButton(context, checkoutBike),
-                  ],
+                  ),
                 ),
-              ),
+                SizedBox(height: responsiveHeight(20.0)),
+                checkoutBike.photoUrl == null
+                    ? Icon(Icons.image_outlined, size: responsiveWidth(100.0))
+                    : Image.network(checkoutBike.photoUrl.toString()),
+                SizedBox(height: responsiveHeight(10.0)),
+                Text(
+                  'Bike Type: ${checkoutBike.tag}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: responsiveHeight(15.0)),
+                Text(
+                  'Average Bike Rating:',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: responsiveHeight(10.0)),
+                displayRating(checkoutBike),
+                SizedBox(height: responsiveHeight(15.0)),
+                checkoutButton(context, checkoutBike),
+                SizedBox(height: responsiveHeight(10.0)),
+              ],
             ),
           ),
         ),
