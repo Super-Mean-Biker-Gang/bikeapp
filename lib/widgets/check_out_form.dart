@@ -213,6 +213,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
         textColor: Colors.white,
         filledColor: Colors.purple[500],
         onPressed: () {
+          reportMissingBike(checkoutBike);
           showThankYouPopup(context, checkoutBike);
         },
       ),
@@ -267,7 +268,6 @@ class _CheckoutFormState extends State<CheckoutForm> {
             TextButton(
               child: Text("Report"),
               onPressed: () {
-                reportMissingBike(checkoutBike);
                 Navigator.of(context).pushNamed(MapScreen.routeName);
               },
             ),
