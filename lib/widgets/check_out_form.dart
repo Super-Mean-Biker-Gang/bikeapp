@@ -114,23 +114,32 @@ class _CheckoutFormState extends State<CheckoutForm> {
                   ),
                 ),
                 SizedBox(height: responsiveHeight(20.0)),
-                // checkoutBike.photoUrl == null
-                //     ? Icon(Icons.image_outlined, size: responsiveWidth(100.0))
-                //     : Image.network(checkoutBike.photoUrl.toString()),
-                Image.network(checkoutBike.photoUrl.toString(),
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                Image.network(
+                  checkoutBike.photoUrl.toString(),
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) return child;
                     return Center(
                       child: CircularProgressIndicator(
                         value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes
-                        : null,
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes
+                            : null,
                       ),
                     );
                   },
                 ),
-                SizedBox(height: responsiveHeight(10.0)),
+                SizedBox(height: responsiveHeight(15.0)),
+                Text(
+                  'Is this bike missing?',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                missingButton(context, checkoutBike),
+                SizedBox(height: responsiveHeight(15.0)),
                 Text(
                   'Bike Type: ${checkoutBike.tag}',
                   style: TextStyle(
@@ -195,6 +204,21 @@ class _CheckoutFormState extends State<CheckoutForm> {
     );
   }
 
+  Widget missingButton(BuildContext context, Bike checkoutBike) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+          vertical: responsiveHeight(10.0), horizontal: responsiveWidth(75.0)),
+      child: CoolButton(
+        title: 'Report Missing',
+        textColor: Colors.white,
+        filledColor: Colors.purple[500],
+        onPressed: () {
+          showThankYouPopup(context, checkoutBike);
+        },
+      ),
+    );
+  }
+
   void checkoutPopUp(BuildContext context, Bike checkoutBike) {
     showDialog(
       context: context,
@@ -227,12 +251,47 @@ class _CheckoutFormState extends State<CheckoutForm> {
     );
   }
 
+  void showThankYouPopup(BuildContext context, Bike checkoutBike) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Thank You",
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+              'Thank you for reporting this bike missing and helping us update our map.',
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Report"),
+              onPressed: () {
+                reportMissingBike(checkoutBike);
+                Navigator.of(context).pushNamed(MapScreen.routeName);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void checkoutUpdate(Bike checkoutBike) async {
     String id = await DatabaseService().getBikeId(checkoutBike);
     if (id != null) {
       FirebaseFirestore.instance.collection('bikes').doc(id).update({
         "isBeingUsed": true,
         "riderEmail": user.email,
+      });
+    }
+  }
+
+  void reportMissingBike(Bike checkoutBike) async {
+    String id = await DatabaseService().getBikeId(checkoutBike);
+    if (id != null) {
+      FirebaseFirestore.instance.collection('bikes').doc(id).update({
+        "isStolen": true,
       });
     }
   }
