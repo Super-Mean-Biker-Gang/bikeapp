@@ -9,7 +9,6 @@ import 'package:bikeapp/screens/terms_of_service_screen.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bikeapp/styles/custom_input_decoration.dart';
@@ -22,6 +21,8 @@ class AddBikeForm extends StatefulWidget {
   @override
   _AddBikeFormState createState() => _AddBikeFormState();
 }
+
+enum BikeTag { ROAD, MOUNTAIN, HYBRID }
 
 class _AddBikeFormState extends State<AddBikeForm> {
   File image;
@@ -36,7 +37,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
   String imageURL;
   String _waverMessage;
   String name;
-  List<String> tags = [];
+  BikeTag tag;
+  final _formKey = GlobalKey<FormState>();
 
   void getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -60,9 +62,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
     if (pickedFile != null) {
       image = File(pickedFile.path);
       FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref = storage
-          .ref()
-          .child("image " + DateTime.now().toString()); // need better name
+      Reference ref = storage.ref().child("image " + DateTime.now().toString());
       UploadTask uploadTask = ref.putFile(image);
       uploadTask.then((res) async {
         imageURL = await res.ref.getDownloadURL();
@@ -83,6 +83,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
     user = auth.currentUser;
     retrieveLocation();
     loadText();
+    tag = BikeTag.ROAD;
   }
 
   //********************************************************************************** */
@@ -96,32 +97,38 @@ class _AddBikeFormState extends State<AddBikeForm> {
       return Container(
         child: SingleChildScrollView(
           child: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(height: responsiveHeight(20.0)),
-              showImage(context),
-              SizedBox(height: responsiveHeight(20.0)),
-              Row(
+            child: Form(
+              key: _formKey,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  selectPhotoButton(context),
-                  SizedBox(width: 10),
-                  useCamerButton(
-                    context,
-                  )
+                  SizedBox(height: responsiveHeight(20.0)),
+                  showImage(context),
+                  SizedBox(height: responsiveHeight(20.0)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      selectPhotoButton(context),
+                      SizedBox(width: 10),
+                      useCamerButton(
+                        context,
+                      )
+                    ],
+                  ),
+                  SizedBox(height: responsiveHeight(20.0)),
+                  bikeNameField(),
+                  SizedBox(height: responsiveHeight(20.0)),
+                  Text("Lock Combination",
+                      style: TextStyle(color: Colors.white)),
+                  lockInput(context),
+                  SizedBox(height: responsiveHeight(20.0)),
+                  bikeTagCheckBoxes(context),
+                  SizedBox(height: responsiveHeight(20.0)),
+                  addBikeButton(context),
+                  SizedBox(height: responsiveHeight(20.0)),
                 ],
               ),
-              SizedBox(height: responsiveHeight(20.0)),
-              bikeNameField(),
-              SizedBox(height: responsiveHeight(20.0)),
-              Text("Lock Combination", style: TextStyle(color: Colors.white)),
-              lockInput(context),
-              SizedBox(height: responsiveHeight(20.0)),
-              bikeTagCheckBoxes(context),
-              SizedBox(height: responsiveHeight(20.0)),
-              addBikeButton(context),
-              SizedBox(height: responsiveHeight(20.0)),
-            ]),
+            ),
           ),
         ),
       );
@@ -134,8 +141,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
       keyboardType: TextInputType.text,
       style: TextStyle(color: Colors.white),
       decoration: customInputDecoration(
-          hint: 'Bike name', icon: Icon(Icons.pedal_bike) // WILL CHANGE LATER
-          ),
+          hint: 'Bike name', icon: Icon(Icons.pedal_bike)),
       validator: (value) {
         if (value.isEmpty) {
           return 'Please enter a bike name';
@@ -154,7 +160,14 @@ class _AddBikeFormState extends State<AddBikeForm> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Flexible(
-            child: TextField(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'All three locks numbers must be entered';
+                } else {
+                  return null;
+                }
+              },
               style: TextStyle(color: Colors.white),
               controller: lockControllerOne,
               decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
@@ -170,7 +183,14 @@ class _AddBikeFormState extends State<AddBikeForm> {
           ),
           SizedBox(width: 20.0),
           Flexible(
-            child: TextField(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'All three locks numbers must be entered';
+                } else {
+                  return null;
+                }
+              },
               style: TextStyle(color: Colors.white),
               controller: lockControllerTwo,
               decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
@@ -186,7 +206,14 @@ class _AddBikeFormState extends State<AddBikeForm> {
           ),
           SizedBox(width: 20.0),
           Flexible(
-            child: TextField(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'All three locks numbers must be entered';
+                } else {
+                  return null;
+                }
+              },
               style: TextStyle(color: Colors.white),
               controller: lockControllerThree,
               decoration: InputDecoration(contentPadding: EdgeInsets.all(10)),
@@ -224,25 +251,29 @@ class _AddBikeFormState extends State<AddBikeForm> {
     return SizedBox(
       height: responsiveWidth(26.0),
       child: ElevatedButton(
-          child: Text(
-            "Select Photo",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: responsiveWidth(12.0),
-            ),
+        child: Text(
+          "Select Photo",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: responsiveWidth(12.0),
           ),
-          onPressed: () {
-            getImage();
-          },
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.cyan),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                  side: BorderSide(
-                    color: Colors.cyanAccent,
-                    width: responsiveWidth(1.0),
-                  ))))),
+        ),
+        onPressed: () {
+          getImage();
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.cyan),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                side: BorderSide(
+                  color: Colors.cyanAccent,
+                  width: responsiveWidth(1.0),
+                ),
+              ),
+            )),
+      ),
     );
   }
 
@@ -250,25 +281,28 @@ class _AddBikeFormState extends State<AddBikeForm> {
     return SizedBox(
       height: responsiveWidth(26.0),
       child: ElevatedButton(
-          child: Text(
-            "Use Camera",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: responsiveWidth(12.0),
-            ),
+        child: Text(
+          "Use Camera",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: responsiveWidth(12.0),
           ),
-          onPressed: () {
-            takePhoto();
-          },
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.cyan),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                  side: BorderSide(
-                    color: Colors.cyanAccent,
-                    width: responsiveWidth(1.0),
-                  ))))),
+        ),
+        onPressed: () {
+          takePhoto();
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.cyan),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+            side: BorderSide(
+              color: Colors.cyanAccent,
+              width: responsiveWidth(1.0),
+            ),
+          )),
+        ),
+      ),
     );
   }
 
@@ -277,48 +311,68 @@ class _AddBikeFormState extends State<AddBikeForm> {
       width: responsiveWidth(160.0),
       height: responsiveWidth(26.0),
       child: ElevatedButton(
-          child: Text(
-            "Add Bike",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: responsiveWidth(12.0),
-            ),
+        child: Text(
+          "Add Bike",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: responsiveWidth(12.0),
           ),
-          onPressed: () {
+        ),
+        onPressed: () {
+          // Make sure all fields are valid before executing add bike
+          if (_formKey.currentState.validate()) {
             submitAddBike();
-          },
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.cyan),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                  side: BorderSide(
-                    color: Colors.cyanAccent,
-                    width: responsiveWidth(1.0),
-                  ))))),
+          }
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.cyan),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+            side: BorderSide(
+              color: Colors.cyanAccent,
+              width: responsiveWidth(1.0),
+            ),
+          )),
+        ),
+      ),
     );
   }
 
   Widget bikeTagCheckBoxes(BuildContext context) {
     return Column(
-      children: [
-        Container(
-          child: CheckboxGroup(
-            labelStyle: TextStyle(
-              color: Colors.white,
-            ),
-            activeColor: Colors.white,
-            checkColor: Colors.cyan,
-            labels: <String>["Road Bike", "Mountain Bike", "Hybrid"],
-            onChange: (bool isChecked, String label, int index) {
-              if (isChecked && !tags.contains(label)) {
-                tags.add(label);
-              } else if (!isChecked && tags.contains(label)) {
-                tags.remove(label);
-              }
-              setState(() {});
-            },
-          ),
+      children: <Widget>[
+        RadioListTile<BikeTag>(
+          title: const Text('Road Bike', style: TextStyle(color: Colors.white)),
+          value: BikeTag.ROAD,
+          groupValue: tag,
+          onChanged: (value) {
+            setState(() {
+              tag = value;
+            });
+          },
+        ),
+        RadioListTile<BikeTag>(
+          title: const Text('Mountain Bike',
+              style: TextStyle(color: Colors.white)),
+          value: BikeTag.MOUNTAIN,
+          groupValue: tag,
+          onChanged: (value) {
+            setState(() {
+              tag = value;
+            });
+          },
+        ),
+        RadioListTile<BikeTag>(
+          title:
+              const Text('Hybrid Bike', style: TextStyle(color: Colors.white)),
+          value: BikeTag.HYBRID,
+          groupValue: tag,
+          onChanged: (value) {
+            setState(() {
+              tag = value;
+            });
+          },
         ),
       ],
     );
@@ -390,7 +444,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
                         locationData != null ? locationData.latitude : 45,
                     'longitude':
                         locationData != null ? locationData.longitude : 30,
-                    'tags': tags,
+                    'tag': tag.toString(),
                     'rating': null,
                     'averageRating': null,
                     'photoUrl': imageURL,

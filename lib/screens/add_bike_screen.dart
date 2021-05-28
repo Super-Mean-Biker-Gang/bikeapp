@@ -11,6 +11,16 @@ class AddBikeScreen extends StatelessWidget {
     return Container(
       decoration: decoration(),
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("End Ride"),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back),
+          ),
+          centerTitle: true,
+        ),
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: SizedBox(

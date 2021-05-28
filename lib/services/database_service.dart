@@ -46,14 +46,22 @@ class DatabaseService {
     return snapshot.first.id;
   }
 
-  void endRide(
-      double newRating, Bike currentBike, LocationData locationData) async {
+  void endRide(double newRating, Bike currentBike, LocationData locationData,
+      String note) async {
     String id = await getBikeId(currentBike); // firebase id of bike
     // Copy list, push new rating onto before updating
     List<dynamic> ratings = currentBike.rating;
+    List<dynamic> notes = currentBike.notes;
 
     if (ratings == null) {
       ratings = [];
+    }
+
+    if (note != null && note.isNotEmpty) {
+      if (notes == null) {
+        notes = [];
+      }
+      notes.add(note);
     }
 
     ratings.add(newRating);
@@ -71,6 +79,7 @@ class DatabaseService {
         "averageRating": averageRating,
         "latitude": locationData.latitude,
         "longitude": locationData.longitude,
+        'notes': notes,
       });
     }
   }

@@ -40,7 +40,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
                 child: Column(
                   children: [
                     Text(
-                      checkoutBike.tags[0].toString(),
+                      checkoutBike.tag,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: responsiveWidth(18.0),
