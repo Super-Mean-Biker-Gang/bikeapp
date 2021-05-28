@@ -1,7 +1,6 @@
 import 'package:bikeapp/models/bike.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/database_service.dart';
-import 'package:bikeapp/widgets/location_services_denied_popup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

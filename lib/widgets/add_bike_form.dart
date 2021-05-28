@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:bikeapp/widgets/location_services_denied_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -115,8 +114,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
                 SizedBox(height: responsiveHeight(20.0)),
                 bikeNameField(),
                 SizedBox(height: responsiveHeight(20.0)),
-                Text("Lock Combination",
-                    style: TextStyle(color: Colors.white)),
+                Text("Lock Combination", style: TextStyle(color: Colors.white)),
                 lockInput(context),
                 SizedBox(height: responsiveHeight(20.0)),
                 bikeTagCheckBoxes(context),
@@ -130,7 +128,6 @@ class _AddBikeFormState extends State<AddBikeForm> {
       ),
     );
   }
-  
 
   Widget bikeNameField() {
     return TextFormField(
@@ -319,7 +316,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
         onPressed: () {
           if (locationData == null) {
             showLocationPermissionDialog();
-          } else {        
+          } else {
             // Make sure all fields are valid before executing add bike
             if (_formKey.currentState.validate()) {
               submitAddBike();
