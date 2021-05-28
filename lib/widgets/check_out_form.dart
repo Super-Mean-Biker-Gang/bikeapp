@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:bikeapp/models/bike.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/screens/map_screen.dart';
+import 'package:bikeapp/screens/timer_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:bikeapp/services/database_service.dart';
 import 'package:bikeapp/styles/color_gradients.dart';
@@ -215,7 +216,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(MapScreen.routeName);
+                  Navigator.of(context).pushNamed(TimerScreen.routeName);
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.green),
