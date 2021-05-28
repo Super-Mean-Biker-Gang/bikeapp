@@ -1,7 +1,6 @@
 import 'package:bikeapp/models/bike.dart';
 import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/database_service.dart';
-import 'package:bikeapp/widgets/location_services_denied_popup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,9 +44,7 @@ class _EndRideFormState extends State<EndRideForm> {
   //********************************************************************************** */
   @override
   Widget build(BuildContext context) {
-    if (locationData == null) {
-      return LocationServicesDeniedPopup();
-    } else if (currentBike == null) {
+    if (currentBike == null) {
       return CircularProgressIndicator();
     } else {
       return Container(
@@ -135,7 +132,11 @@ class _EndRideFormState extends State<EndRideForm> {
           ),
         ),
         onPressed: () {
-          endRide(newRating);
+          if (locationData != null) {
+            endRide(newRating);
+          } else {
+            showLocationPermissionDialog();
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.cyan),
@@ -148,6 +149,31 @@ class _EndRideFormState extends State<EndRideForm> {
           )),
         ),
       ),
+    );
+  }
+
+  showLocationPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Location Permissions Denied",
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+              'Location permission are denied. \n \nLocation permissions must be enabled to use this feature.',
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

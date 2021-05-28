@@ -12,7 +12,7 @@ class AddBikeScreen extends StatelessWidget {
       decoration: decoration(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text("End Ride"),
+          title: Text("Add Bike"),
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
