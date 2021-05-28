@@ -91,49 +91,46 @@ class _AddBikeFormState extends State<AddBikeForm> {
   //********************************************************************************** */
   @override
   Widget build(BuildContext context) {
-    if (locationData == null) {
-      return LocationServicesDeniedPopup();
-    } else {
-      return Container(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: responsiveHeight(20.0)),
-                  showImage(context),
-                  SizedBox(height: responsiveHeight(20.0)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      selectPhotoButton(context),
-                      SizedBox(width: 10),
-                      useCamerButton(
-                        context,
-                      )
-                    ],
-                  ),
-                  SizedBox(height: responsiveHeight(20.0)),
-                  bikeNameField(),
-                  SizedBox(height: responsiveHeight(20.0)),
-                  Text("Lock Combination",
-                      style: TextStyle(color: Colors.white)),
-                  lockInput(context),
-                  SizedBox(height: responsiveHeight(20.0)),
-                  bikeTagCheckBoxes(context),
-                  SizedBox(height: responsiveHeight(20.0)),
-                  addBikeButton(context),
-                  SizedBox(height: responsiveHeight(20.0)),
-                ],
-              ),
+    return Container(
+      child: SingleChildScrollView(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: responsiveHeight(20.0)),
+                showImage(context),
+                SizedBox(height: responsiveHeight(20.0)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    selectPhotoButton(context),
+                    SizedBox(width: 10),
+                    useCamerButton(
+                      context,
+                    )
+                  ],
+                ),
+                SizedBox(height: responsiveHeight(20.0)),
+                bikeNameField(),
+                SizedBox(height: responsiveHeight(20.0)),
+                Text("Lock Combination",
+                    style: TextStyle(color: Colors.white)),
+                lockInput(context),
+                SizedBox(height: responsiveHeight(20.0)),
+                bikeTagCheckBoxes(context),
+                SizedBox(height: responsiveHeight(20.0)),
+                addBikeButton(context),
+                SizedBox(height: responsiveHeight(20.0)),
+              ],
             ),
           ),
         ),
-      );
-    }
+      ),
+    );
   }
+  
 
   Widget bikeNameField() {
     return TextFormField(
@@ -320,9 +317,13 @@ class _AddBikeFormState extends State<AddBikeForm> {
           ),
         ),
         onPressed: () {
-          // Make sure all fields are valid before executing add bike
-          if (_formKey.currentState.validate()) {
-            submitAddBike();
+          if (locationData == null) {
+            showLocationPermissionDialog();
+          } else {        
+            // Make sure all fields are valid before executing add bike
+            if (_formKey.currentState.validate()) {
+              submitAddBike();
+            }
           }
         },
         style: ButtonStyle(
@@ -485,5 +486,30 @@ class _AddBikeFormState extends State<AddBikeForm> {
     setState(() {
       _waverMessage = message;
     });
+  }
+
+  showLocationPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Location Permissions Denied",
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+              'Location permission are denied. \n \nLocation permissions must be enabled to use this feature.',
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
