@@ -23,19 +23,11 @@ class EndRideScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.transparent,
         body: SafeArea(
-          child: SizedBox(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: responsiveHeight(25.0),
-                horizontal: responsiveWidth(15.0),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    EndRideForm(),
-                  ],
-                ),
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                EndRideForm(),
+              ],
             ),
           ),
         ),

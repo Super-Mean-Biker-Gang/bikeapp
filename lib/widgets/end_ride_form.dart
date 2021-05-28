@@ -52,12 +52,29 @@ class _EndRideFormState extends State<EndRideForm> {
           child: Center(
             child: Column(
               children: [
+                Padding(
+                  padding: EdgeInsets.only(top: responsiveHeight(20.0)),
+                  child: Text(
+                    '${currentBike.bikeName}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsiveWidth(25.0),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(height: responsiveHeight(20.0)),
                 displayImage(),
-                Text(currentBike.bikeName,
-                    style: TextStyle(color: Colors.white)),
-                SizedBox(height: 30),
-                Text("Rate your ride", style: TextStyle(color: Colors.white)),
-                SizedBox(height: 30),
+                SizedBox(height: responsiveHeight(15.0)),
+                Text(
+                  'Rate your Ride',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: responsiveHeight(15.0)),
                 RatingBar.builder(
                   initialRating: 3,
                   minRating: 0.5,
@@ -75,9 +92,15 @@ class _EndRideFormState extends State<EndRideForm> {
                     }
                   },
                 ),
-                SizedBox(height: 40),
-                Text("Comments about bike",
-                    style: TextStyle(color: Colors.white)),
+                SizedBox(height: responsiveHeight(15.0)),
+                Text(
+                  'Add Notes About Bike:',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 60.0),
                   child: TextField(
@@ -87,8 +110,9 @@ class _EndRideFormState extends State<EndRideForm> {
                     maxLines: 5, // when user presses enter it will adapt to it
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: responsiveHeight(15.0)),
                 endRideButton(context),
+                SizedBox(height: responsiveHeight(15.0)),
               ],
             ),
           ),
@@ -111,11 +135,21 @@ class _EndRideFormState extends State<EndRideForm> {
   }
 
   Widget displayImage() {
-    if (currentBike.photoUrl != null) {
-      return Image.network(currentBike.photoUrl);
-    } else {
-      return CircularProgressIndicator();
-    }
+    return Image.network(
+      currentBike.photoUrl.toString(),
+      loadingBuilder: (BuildContext context, Widget child,
+          ImageChunkEvent loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes
+                : null,
+          ),
+        );
+      },
+    );
   }
 
   Widget endRideButton(BuildContext context) {
