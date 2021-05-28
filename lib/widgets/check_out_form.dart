@@ -149,6 +149,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
 
   Widget displayRating(Bike checkoutBike) {
     return RatingBar.builder(
+      ignoreGestures: true,
       initialRating:
           checkoutBike.averageRating == null ? 0.0 : checkoutBike.averageRating,
       minRating: 1,
