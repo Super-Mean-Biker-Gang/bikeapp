@@ -57,7 +57,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                 textAlign: TextAlign.left,
                 style: TextStyle(color: Colors.white)),
             TextButton(
-              child: Text("Login here!", style: TextStyle(color: Colors.pink)),
+              child: Text("Login here!", style: TextStyle(color: Colors.cyan)),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -131,7 +131,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     return CoolButton(
       title: 'Register',
       textColor: Colors.white,
-      filledColor: Colors.pink,
+      filledColor: Colors.cyan,
       onPressed: () {
         if (_registerFormKey.currentState.validate()) {
           if (passwordController.text == confirmPasswordController.text) {
