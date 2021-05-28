@@ -56,7 +56,8 @@ class _EndRideFormState extends State<EndRideForm> {
             child: Column(
               children: [
                 displayImage(),
-                Text(currentBike.bikeName, style: TextStyle(color: Colors.white)),
+                Text(currentBike.bikeName,
+                    style: TextStyle(color: Colors.white)),
                 SizedBox(height: 30),
                 Text("Rate your ride", style: TextStyle(color: Colors.white)),
                 SizedBox(height: 30),
@@ -78,7 +79,8 @@ class _EndRideFormState extends State<EndRideForm> {
                   },
                 ),
                 SizedBox(height: 40),
-                Text("Comments about bike", style: TextStyle(color: Colors.white)),
+                Text("Comments about bike",
+                    style: TextStyle(color: Colors.white)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 60.0),
                   child: TextField(
@@ -134,7 +136,7 @@ class _EndRideFormState extends State<EndRideForm> {
         ),
         onPressed: () {
           endRide(newRating);
-        },        
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.cyan),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
