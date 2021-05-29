@@ -109,7 +109,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return CoolButton(
       title: 'Submit Request',
       textColor: Colors.white,
-      filledColor: Colors.cyan[500],
+      filledColor: Colors.green,
       onPressed: () async {
         setState(() {
           eMessage = "";
@@ -169,7 +169,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       context, ModalRoute.withName(ForgotPassword.routeName));
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.cyan[500]),
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
                 )),
             TextButton(
                 child: Text(
@@ -180,7 +180,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   Navigator.of(context).pushNamed(SignInScreen.routeName);
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.cyan[500]),
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
                 )),
           ],
         );
