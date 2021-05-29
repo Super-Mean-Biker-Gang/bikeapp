@@ -223,17 +223,17 @@ class MapScreenState extends State<MapScreen> {
       filterByRating(item, id);
     }
     if (_roadBikeSelected) {
-      if (tag == 'ROAD') {
+      if (tag == 'Road Bike') {
         filterByRating(item, id);
       }
     }
     if (_mountainBikeSelected) {
-      if (tag == 'MOUNTAIN') {
+      if (tag == 'Mountain Bike') {
         filterByRating(item, id);
       }
     }
     if (_hybridBikeSelected) {
-      if (tag == 'HYBRID') {
+      if (tag == 'Hybrid Bike') {
         filterByRating(item, id);
       }
     }
