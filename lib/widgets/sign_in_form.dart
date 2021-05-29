@@ -173,7 +173,7 @@ class _SignInFormState extends State<SignInForm> {
                   Navigator.of(context).pop();
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                  backgroundColor: MaterialStateProperty.all(Colors.cyan[500]),
                 )),
           ],
         );

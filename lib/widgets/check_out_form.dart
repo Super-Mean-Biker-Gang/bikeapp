@@ -244,7 +244,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
                   Navigator.of(context).pushNamed(TimerScreen.routeName);
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                  backgroundColor: MaterialStateProperty.all(Colors.cyan[500]),
                 )),
           ],
         );
