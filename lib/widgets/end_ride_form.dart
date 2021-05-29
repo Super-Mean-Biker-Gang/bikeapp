@@ -131,7 +131,10 @@ class _EndRideFormState extends State<EndRideForm> {
   void endRide(double newRating) async {
     note = noteController.text;
     databaseService.endRide(newRating, currentBike, locationData, note);
-    Navigator.of(context).pushNamed(MapScreen.routeName);
+    // Navigator.of(context).pushNamed(MapScreen.routeName);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      Navigator.of(context).pushNamed(MapScreen.routeName);
+    });
   }
 
   Widget displayImage() {
