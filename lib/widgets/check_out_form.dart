@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:bikeapp/models/bike.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/screens/map_screen.dart';
+import 'package:bikeapp/screens/timer_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:bikeapp/services/database_service.dart';
 import 'package:bikeapp/styles/color_gradients.dart';
@@ -98,34 +99,70 @@ class _CheckoutFormState extends State<CheckoutForm> {
         appBar: AppBar(title: Text('Check out')),
         backgroundColor: Colors.transparent,
         body: SafeArea(
-          child: SizedBox(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: responsiveHeight(35.0),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Text(
-                      checkoutBike.tag,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: responsiveWidth(18.0),
-                        fontWeight: FontWeight.w500,
-                      ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: responsiveHeight(20.0)),
+                  child: Text(
+                    '${checkoutBike.bikeName}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsiveWidth(25.0),
+                      fontWeight: FontWeight.w500,
                     ),
-                    SizedBox(height: responsiveHeight(20.0)),
-                    checkoutBike.photoUrl == null
-                        ? Icon(Icons.image_outlined,
-                            size: responsiveWidth(100.0))
-                        : Image.network(checkoutBike.photoUrl.toString()),
-                    SizedBox(height: responsiveHeight(20.0)),
-                    displayRating(checkoutBike),
-                    SizedBox(height: responsiveHeight(20.0)),
-                    checkoutButton(context, checkoutBike),
-                  ],
+                  ),
                 ),
-              ),
+                SizedBox(height: responsiveHeight(20.0)),
+                Image.network(
+                  checkoutBike.photoUrl.toString(),
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes
+                            : null,
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: responsiveHeight(15.0)),
+                Text(
+                  'Is this bike missing?',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                missingButton(context, checkoutBike),
+                SizedBox(height: responsiveHeight(15.0)),
+                Text(
+                  'Bike Type: ${checkoutBike.tag}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: responsiveHeight(15.0)),
+                Text(
+                  'Average Bike Rating:',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsiveWidth(15.0),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: responsiveHeight(10.0)),
+                displayRating(checkoutBike),
+                SizedBox(height: responsiveHeight(15.0)),
+                checkoutButton(context, checkoutBike),
+                SizedBox(height: responsiveHeight(10.0)),
+              ],
             ),
           ),
         ),
@@ -135,6 +172,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
 
   Widget displayRating(Bike checkoutBike) {
     return RatingBar.builder(
+      ignoreGestures: true,
       initialRating:
           checkoutBike.averageRating == null ? 0.0 : checkoutBike.averageRating,
       minRating: 1,
@@ -146,9 +184,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
         Icons.star,
         color: Colors.yellowAccent,
       ),
-      onRatingUpdate: (rating) {
-        print(rating);
-      },
+      onRatingUpdate: (rating) {},
     );
   }
 
@@ -163,6 +199,22 @@ class _CheckoutFormState extends State<CheckoutForm> {
         onPressed: () {
           retrieveBikeLocation(checkoutBike);
           checkDistance(checkoutBike);
+        },
+      ),
+    );
+  }
+
+  Widget missingButton(BuildContext context, Bike checkoutBike) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+          vertical: responsiveHeight(10.0), horizontal: responsiveWidth(75.0)),
+      child: CoolButton(
+        title: 'Report Missing',
+        textColor: Colors.white,
+        filledColor: Colors.purple[500],
+        onPressed: () {
+          reportMissingBike(checkoutBike);
+          showThankYouPopup(context, checkoutBike);
         },
       ),
     );
@@ -189,11 +241,36 @@ class _CheckoutFormState extends State<CheckoutForm> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(MapScreen.routeName);
+                  Navigator.of(context).pushNamed(TimerScreen.routeName);
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.green),
                 )),
+          ],
+        );
+      },
+    );
+  }
+
+  void showThankYouPopup(BuildContext context, Bike checkoutBike) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Thank You",
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+              'Thank you for reporting this bike missing and helping us update our map.',
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Report"),
+              onPressed: () {
+                Navigator.of(context).pushNamed(MapScreen.routeName);
+              },
+            ),
           ],
         );
       },
@@ -206,6 +283,15 @@ class _CheckoutFormState extends State<CheckoutForm> {
       FirebaseFirestore.instance.collection('bikes').doc(id).update({
         "isBeingUsed": true,
         "riderEmail": user.email,
+      });
+    }
+  }
+
+  void reportMissingBike(Bike checkoutBike) async {
+    String id = await DatabaseService().getBikeId(checkoutBike);
+    if (id != null) {
+      FirebaseFirestore.instance.collection('bikes').doc(id).update({
+        "isStolen": true,
       });
     }
   }
