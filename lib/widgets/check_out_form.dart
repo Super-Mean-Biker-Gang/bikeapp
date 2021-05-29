@@ -182,7 +182,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
       itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
       itemBuilder: (context, _) => Icon(
         Icons.star,
-        color: Colors.yellowAccent,
+        color: Colors.cyan,
       ),
       onRatingUpdate: (rating) {},
     );
