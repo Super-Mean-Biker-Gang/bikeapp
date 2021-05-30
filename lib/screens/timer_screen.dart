@@ -21,8 +21,8 @@ class _TimerScreenState extends State<TimerScreen> {
 
   var ban = false;
 
-  Timer bikeTimer; 
-  Timer banTimer; 
+  Timer bikeTimer;
+  Timer banTimer;
 
   @override
   void initState() {
@@ -199,7 +199,8 @@ class _TimerScreenState extends State<TimerScreen> {
         ),
         onPressed: () {
           // Navigator.pushNamed(context, EndRideScreen.routeName);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EndRideScreen()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => EndRideScreen()));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.cyan[500]),

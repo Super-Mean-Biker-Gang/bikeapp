@@ -227,10 +227,12 @@ class _CheckoutFormState extends State<CheckoutForm> {
         return AlertDialog(
           title: Text(
             'Here is the combination to the lock ',
+            textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
           content: Text(
             checkoutBike.lockCombo.toString(),
+            textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Theme.of(context).primaryColor,
