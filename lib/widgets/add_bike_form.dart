@@ -36,7 +36,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
   String imageURL;
   String _waverMessage;
   String name;
-  BikeTag tag;
+  String tag;
+  BikeTag bikeTag;
   final _formKey = GlobalKey<FormState>();
 
   void getImage() async {
@@ -82,7 +83,8 @@ class _AddBikeFormState extends State<AddBikeForm> {
     user = auth.currentUser;
     retrieveLocation();
     loadText();
-    tag = BikeTag.ROAD;
+    bikeTag = BikeTag.ROAD;
+    tag = "Road Bike";
   }
 
   //********************************************************************************** */
@@ -343,10 +345,11 @@ class _AddBikeFormState extends State<AddBikeForm> {
         RadioListTile<BikeTag>(
           title: const Text('Road Bike', style: TextStyle(color: Colors.white)),
           value: BikeTag.ROAD,
-          groupValue: tag,
+          groupValue: bikeTag,
           onChanged: (value) {
             setState(() {
-              tag = value;
+              bikeTag = value;
+              tag = 'Road Bike';
             });
           },
         ),
@@ -354,10 +357,11 @@ class _AddBikeFormState extends State<AddBikeForm> {
           title: const Text('Mountain Bike',
               style: TextStyle(color: Colors.white)),
           value: BikeTag.MOUNTAIN,
-          groupValue: tag,
+          groupValue: bikeTag,
           onChanged: (value) {
             setState(() {
-              tag = value;
+              bikeTag = value;
+              tag = 'Mountain Bike';
             });
           },
         ),
@@ -365,10 +369,11 @@ class _AddBikeFormState extends State<AddBikeForm> {
           title:
               const Text('Hybrid Bike', style: TextStyle(color: Colors.white)),
           value: BikeTag.HYBRID,
-          groupValue: tag,
+          groupValue: bikeTag,
           onChanged: (value) {
             setState(() {
-              tag = value;
+              bikeTag = value;
+              tag = 'Hybrid Bike';
             });
           },
         ),
@@ -442,7 +447,7 @@ class _AddBikeFormState extends State<AddBikeForm> {
                         locationData != null ? locationData.latitude : 45,
                     'longitude':
                         locationData != null ? locationData.longitude : 30,
-                    'tag': tag.toString(),
+                    'tag': tag,
                     'rating': null,
                     'averageRating': null,
                     'photoUrl': imageURL,
