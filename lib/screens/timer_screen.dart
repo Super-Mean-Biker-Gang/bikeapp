@@ -21,6 +21,9 @@ class _TimerScreenState extends State<TimerScreen> {
 
   var ban = false;
 
+  Timer bikeTimer;
+  Timer banTimer;
+
   @override
   void initState() {
     startBikeTimeout();
@@ -28,16 +31,23 @@ class _TimerScreenState extends State<TimerScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    bikeTimer.cancel();
+    banTimer.cancel();
+    super.dispose();
+  }
+
   String get timerText =>
       '${(((timerMaxSeconds - currentSeconds) ~/ 60) ~/ 60).toString().padLeft(2, '0')}:${(((timerMaxSeconds - currentSeconds) ~/ 60) % 60).toString().padLeft(2, '0')}:${((timerMaxSeconds - currentSeconds) % 60).toString().padLeft(2, '0')}';
 
   startBikeTimeout([int milliseconds]) {
     var duration = interval;
-    Timer.periodic(duration, (timer) {
+    bikeTimer = Timer.periodic(duration, (timer) {
       setState(() {
         currentSeconds = timer.tick;
         if (timer.tick >= timerMaxSeconds) {
-          timer.cancel();
+          bikeTimer.cancel();
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -66,11 +76,11 @@ class _TimerScreenState extends State<TimerScreen> {
 
   startBanTimeout() {
     var duration = interval;
-    Timer.periodic(duration, (timer) {
+    banTimer = Timer.periodic(duration, (timer) {
       setState(() {
         currentBanSeconds = timer.tick;
         if (timer.tick >= banTimerSeconds) {
-          timer.cancel();
+          banTimer.cancel();
           ban = true;
         }
       });
@@ -188,7 +198,9 @@ class _TimerScreenState extends State<TimerScreen> {
           ),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, EndRideScreen.routeName);
+          // Navigator.pushNamed(context, EndRideScreen.routeName);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => EndRideScreen()));
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.cyan[500]),
