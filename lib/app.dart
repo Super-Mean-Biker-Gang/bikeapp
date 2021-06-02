@@ -82,10 +82,10 @@ class AuthenticationWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User>();
     final user = AuthenticationService(FirebaseAuth.instance).getUser();
 
-    Future<Bike> bike = getUserBike(user.email);
-
     if (firebaseUser != null && user.emailVerified) {
-      if (bike == null) {
+      Bike userBike;
+      checkIfBike(userBike, firebaseUser);
+      if (userBike == null) {
         return MapScreen();
       } else {
         return TimerScreen();
@@ -97,4 +97,8 @@ class AuthenticationWrapper extends StatelessWidget {
 
 Future<Bike> getUserBike(String userEmail) async {
   return await databaseService.getUsersBike(userEmail);
+}
+
+void checkIfBike(Bike checkoutBike, User user) async {
+  checkoutBike = await databaseService.getUsersBike(user.email);
 }
