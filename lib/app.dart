@@ -1,3 +1,4 @@
+import 'package:bikeapp/models/bike.dart';
 import 'package:bikeapp/screens/accident_waver_screen.dart';
 import 'package:bikeapp/screens/add_bike_screen.dart';
 import 'package:bikeapp/screens/create_account_screen.dart';
@@ -9,6 +10,7 @@ import 'package:bikeapp/screens/privacy_policy_screen.dart';
 import 'package:bikeapp/screens/terms_of_service_screen.dart';
 import 'package:bikeapp/screens/timer_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
+import 'package:bikeapp/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,9 @@ class App extends StatefulWidget {
   @override
   _AppState createState() => _AppState();
 }
+
+Bike userBike;
+DatabaseService databaseService;
 
 class _AppState extends State<App> {
   final routes = {
@@ -34,7 +39,13 @@ class _AppState extends State<App> {
     TermsOfServiceScreen.routeName: (context) => TermsOfServiceScreen(),
     TimerScreen.routeName: (context) => TimerScreen(),
     CheckoutForm.routeName: (context) => CheckoutForm(),
-  };
+  };  
+  
+  @override 
+  void initState() {
+    super.initState();
+    databaseService = new DatabaseService();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +81,20 @@ class AuthenticationWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
     final user = AuthenticationService(FirebaseAuth.instance).getUser();
-
+    
+    Future<Bike> bike = getUserBike(user.email);
+  
     if (firebaseUser != null && user.emailVerified) {
-      return MapScreen();
+      if (bike == null) {
+        return MapScreen();
+      } else {
+        return TimerScreen();
+      }
     }
     return SignInScreen();
   }
+}
+
+Future<Bike> getUserBike(String userEmail) async {
+  return await databaseService.getUsersBike(userEmail);
 }

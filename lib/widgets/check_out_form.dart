@@ -24,6 +24,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
   double newRating;
   final user = AuthenticationService(FirebaseAuth.instance).getUser();
   LocationData locationData;
+  DatabaseService databaseService;
   double userLat;
   double userLon;
   double bikeLat;
@@ -32,6 +33,7 @@ class _CheckoutFormState extends State<CheckoutForm> {
 
   @override
   void initState() {
+    databaseService = new DatabaseService();
     super.initState();
     retrieveLocation();
   }
@@ -197,8 +199,12 @@ class _CheckoutFormState extends State<CheckoutForm> {
         textColor: Colors.white,
         filledColor: Colors.cyan[500],
         onPressed: () {
-          retrieveBikeLocation(checkoutBike);
-          checkDistance(checkoutBike);
+          if (databaseService.getUsersBike(user.email) == null) {
+            retrieveBikeLocation(checkoutBike);
+            checkDistance(checkoutBike);
+          } else {
+            showAlreadyCheckedOutPopUp(context);
+          }
         },
       ),
     );
@@ -271,6 +277,31 @@ class _CheckoutFormState extends State<CheckoutForm> {
               child: Text("Report"),
               onPressed: () {
                 Navigator.of(context).pushNamed(MapScreen.routeName);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showAlreadyCheckedOutPopUp(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Already Have Bike",
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+              'Sorry, It appears you already have a bike checked out.  Please end that ride first, before checking out a new bike',
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             ),
           ],
