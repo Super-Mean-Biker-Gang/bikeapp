@@ -39,9 +39,9 @@ class _AppState extends State<App> {
     TermsOfServiceScreen.routeName: (context) => TermsOfServiceScreen(),
     TimerScreen.routeName: (context) => TimerScreen(),
     CheckoutForm.routeName: (context) => CheckoutForm(),
-  };  
-  
-  @override 
+  };
+
+  @override
   void initState() {
     super.initState();
     databaseService = new DatabaseService();
@@ -81,9 +81,9 @@ class AuthenticationWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
     final user = AuthenticationService(FirebaseAuth.instance).getUser();
-    
+
     Future<Bike> bike = getUserBike(user.email);
-  
+
     if (firebaseUser != null && user.emailVerified) {
       if (bike == null) {
         return MapScreen();
