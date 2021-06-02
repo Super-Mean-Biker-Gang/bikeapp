@@ -199,15 +199,23 @@ class _CheckoutFormState extends State<CheckoutForm> {
         textColor: Colors.white,
         filledColor: Colors.cyan[500],
         onPressed: () {
-          if (databaseService.getUsersBike(user.email) == null) {
-            retrieveBikeLocation(checkoutBike);
-            checkDistance(checkoutBike);
-          } else {
-            showAlreadyCheckedOutPopUp(context);
+          if (user != null) {
+            Bike userBike;
+            checkIfBike(userBike);
+            if (userBike == null) {
+              retrieveBikeLocation(checkoutBike);
+              checkDistance(checkoutBike);
+            } else {
+              showAlreadyCheckedOutPopUp(context);
+            }
           }
         },
       ),
     );
+  }
+
+  void checkIfBike(Bike checkoutBike) async {
+    checkoutBike = await databaseService.getUsersBike(user.email);
   }
 
   Widget missingButton(BuildContext context, Bike checkoutBike) {
