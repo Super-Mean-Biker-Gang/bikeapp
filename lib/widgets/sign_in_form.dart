@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bikeapp/models/responsive_size.dart';
 import 'package:bikeapp/screens/forgot_password.dart';
-import 'package:bikeapp/screens/map_screen.dart';
 import 'package:bikeapp/services/authentication_service.dart';
 import 'package:bikeapp/styles/cool_button.dart';
 import 'package:bikeapp/styles/custom_input_decoration.dart';
@@ -121,7 +120,7 @@ class _SignInFormState extends State<SignInForm> {
               if (await context
                   .read<AuthenticationService>()
                   .isEmailVerified()) {
-                return MapScreen();
+                print('validated');
               } else {
                 context.read<AuthenticationService>().emailVerification();
                 print("email verification is needed");
