@@ -121,7 +121,7 @@ class _SignInFormState extends State<SignInForm> {
               if (await context
                   .read<AuthenticationService>()
                   .isEmailVerified()) {
-                return Navigator.of(context).pushNamed(MapScreen.routeName);
+                return MapScreen();
               } else {
                 context.read<AuthenticationService>().emailVerification();
                 print("email verification is needed");
