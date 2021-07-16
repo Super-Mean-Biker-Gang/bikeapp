@@ -8,7 +8,7 @@
    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
    <uses-permission android:name="android.hardware.location.gps" />    
    <application
-        android:label="bikeapp"
+        android:label="Bike Kollective"
         android:icon="@mipmap/ic_launcher">
         <meta-data 
             android:name="com.google.android.geo.API_KEY" android:value="@string/API_KEY" />
